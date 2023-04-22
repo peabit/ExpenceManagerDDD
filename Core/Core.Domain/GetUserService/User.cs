@@ -1,12 +1,11 @@
-﻿using Core.Domain.AggregatesModel.CategoryAggregate;
-using Core.Domain.AggregatesModel.ReceiptAggregate;
+﻿using Core.Domain.AggregatesModel.Categories;
+using Core.Domain.AggregatesModel.Receipts;
 
 namespace Core.Domain.AggregatesModel.UserAggregate;
 
 public class User
 {
     public UserId Id { get; set; }
-    public string Name { get; set; }    
 
     public Category CreateCategory(String name, CategoryId parent = null)
     {

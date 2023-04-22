@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Rceipts\CreateReceiptForUser\" />
+    <Folder Include="Rceipts\DeleteReceipt\" />
+    <Folder Include="Rceipts\ChangeReceipt\" />
+    <Folder Include="ReceiptItems\GetReceiptItems\" />
+    <Folder Include="ReceiptItems\DeleteReceiptItem\" />
+    <Folder Include="ReceiptItems\AddReceiptItem\" />
+    <Folder Include="ReceiptItems\ChangeReceiptItem\" />
+    <Folder Include="Reports\GetTotalExpensesByCategoryReport\" />
+  </ItemGroup>
+
 </Project>

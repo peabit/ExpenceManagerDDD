@@ -1,6 +1,6 @@
 ﻿using Core.Domain.Common;
 
-namespace Core.Domain.AggregatesModel.CategoryAggregate;
+namespace Core.Domain.AggregatesModel.Categories;
 
 public interface ICategoryRepository : IRepository<Category>
 {

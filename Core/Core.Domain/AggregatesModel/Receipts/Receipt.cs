@@ -1,7 +1,7 @@
 ﻿using Core.Domain.AggregatesModel.UserAggregate;
 using Core.Domain.Common;
 
-namespace Core.Domain.AggregatesModel.ReceiptAggregate;
+namespace Core.Domain.AggregatesModel.Receipts;
 
 public class Receipt : IAggregateRoot
 {

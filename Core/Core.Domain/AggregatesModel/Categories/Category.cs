@@ -1,7 +1,7 @@
 ﻿using Core.Domain.AggregatesModel.UserAggregate;
 using Core.Domain.Common;
 
-namespace Core.Domain.AggregatesModel.CategoryAggregate;
+namespace Core.Domain.AggregatesModel.Categories;
 
 public class Category : IAggregateRoot
 {
