@@ -2,6 +2,7 @@
 
 namespace Core.Domain.AggregatesModel.Receipts;
 
-public class ReceiptId : IdBase
+public record ReceiptId : IdBase
 {
+    public ReceiptId(Guid guid) : base(guid) { }
 }

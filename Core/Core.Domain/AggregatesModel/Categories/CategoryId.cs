@@ -2,6 +2,7 @@
 
 namespace Core.Domain.AggregatesModel.Categories;
 
-public class CategoryId : IdBase
+public record CategoryId : IdBase
 {
+	public CategoryId(Guid guid) : base(guid) { }
 }

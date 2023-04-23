@@ -2,6 +2,7 @@
 
 namespace Core.Domain.AggregatesModel.UserAggregate;
 
-public class UserId : IdBase
+public record UserId : IdBase
 {
+	public UserId(Guid guid) : base(guid) { }
 }
