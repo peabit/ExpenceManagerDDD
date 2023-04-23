@@ -10,5 +10,5 @@ public class Receipt : IAggregateRoot
     public string ShopName { get; set; }
     public DateTime DateTime { get; set; }
     public decimal Total { get; set; }
-    public IEnumerable<ReceiptItem> Items { get; private set; }
+    public IEnumerable<ReceiptItem> Items { get; set; }
 }

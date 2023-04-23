@@ -13,7 +13,6 @@ public class ReceiptConfiguration : IEntityTypeConfiguration<Receipt>
         builder.HasKey(x => x.Id);
 
         builder.Ignore(s => s.UserId);
-        builder.Ignore(s => s.Items);
 
         builder
             .Property(r => r.Id)
@@ -21,5 +20,15 @@ public class ReceiptConfiguration : IEntityTypeConfiguration<Receipt>
                 convertToProviderExpression: id => id.ToString(),
                 convertFromProviderExpression: id => new ReceiptId(new Guid(id))
             );
+
+        builder.OwnsMany(r => r.Items, cnfg =>
+        {
+            cnfg.HasKey(i => i.Id);
+
+            cnfg.Property(i => i.Id).HasConversion(
+                convertToProviderExpression: id => id.ToString(),
+                convertFromProviderExpression: id => new ReceiptItemId(new Guid(id))
+            );
+        });
     }
 }
