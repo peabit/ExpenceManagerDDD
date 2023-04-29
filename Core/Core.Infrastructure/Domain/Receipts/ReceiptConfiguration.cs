@@ -1,5 +1,6 @@
 ﻿using Core.Domain.AggregatesModel.Receipts;
-
+using Core.Domain.AggregatesModel.UserAggregate;
+using Core.Infrastructure.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,23 +13,26 @@ public class ReceiptConfiguration : IEntityTypeConfiguration<Receipt>
         builder.ToTable("Receipts");
         builder.HasKey(x => x.Id);
 
-        builder.Ignore(s => s.UserId);
+        builder
+            .Property(r => r.UserId)
+            .UseIdFactory(guid => new UserId(guid));
 
         builder
             .Property(r => r.Id)
-            .HasConversion(
-                convertToProviderExpression: id => id.ToString(),
-                convertFromProviderExpression: id => new ReceiptId(new Guid(id))
-            );
+            .UseIdFactory(guid => new ReceiptId(guid));
 
-        builder.OwnsMany(r => r.Items, cnfg =>
+        builder.Ignore(r => r.Total);
+
+        builder.OwnsMany(r => r.Items, itemsBuilder =>
         {
-            cnfg.HasKey(i => i.Id);
+            itemsBuilder.ToTable("ReceiptItems");
+            itemsBuilder.HasKey(i => i.Id);
 
-            cnfg.Property(i => i.Id).HasConversion(
-                convertToProviderExpression: id => id.ToString(),
-                convertFromProviderExpression: id => new ReceiptItemId(new Guid(id))
-            );
+            itemsBuilder
+                .Property(i => i.Id)
+                .UseIdFactory(guid => new ReceiptItemId(guid));
+
+            itemsBuilder.Ignore(i => i.Coast);
         });
     }
 }

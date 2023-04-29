@@ -3,11 +3,11 @@ using Core.Infrastructure.Domain.Receipts;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Core.Infrastructure.Domain.DataAccess
+namespace Core.Infrastructure.Domain.Common
 {
-    public class DomainContext : DbContext
+    public class SqliteContext : DbContext
     {
-        public DomainContext()
+        public SqliteContext()
         {
             Database.EnsureCreated();
         }
