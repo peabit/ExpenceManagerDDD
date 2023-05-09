@@ -26,7 +26,7 @@ public class Receipt : EntityBase<ReceiptId>, IAggregateRoot
         private set => _shopName = !String.IsNullOrWhiteSpace(value) ? value : throw new DomainException("Shop name cannot be empty"); 
     }
 
-    public DateTime DateTime { get; private set; }
+    public DateTime DateTime { get; private init; }
     public decimal Total => _items.Sum(i => i.Coast);
     public IEnumerable<ReceiptItem> Items => _items;
 

@@ -16,7 +16,7 @@ using Core.Domain.AggregatesModel.Categories;
 
 //var receipt = new Receipt(userId, "Вкусвил", DateTime.Now, items);
 
-//var db = new SqliteContext();
+var db = new SqliteContext();
 //db.Receipts.Add(receipt);
 //db.SaveChanges();
 
@@ -24,6 +24,6 @@ using Core.Domain.AggregatesModel.Categories;
 //db = null;
 //db = new SqliteContext();
 
-//var readedReceipt = db.Receipts.First();
+var readedReceipt = db.Receipts.First();
 
 _ = 0;

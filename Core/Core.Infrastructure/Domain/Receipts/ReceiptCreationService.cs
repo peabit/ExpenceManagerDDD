@@ -18,14 +18,14 @@ public class ReceiptCreationService : IReceiptCreationService
 
     public async Task<Receipt> CreateReceiptAsync(UserId userId, string shopName, DateTime dateTime, IEnumerable<ReceiptItem> items)
     {
-        if (!await _userRepository.Contains(userId))
+        if (!await _userRepository.ContainsAsync(userId))
         {
             throw new DomainException($"User with id {userId} does not exist");
         }
 
         foreach (var item in items)
         {
-            if (!await _categoryRepository.Contains(userId, item.CategoryId))
+            if (!await _categoryRepository.ContainsAsync(userId, item.CategoryId))
             {
                 throw new DomainException($"User with {userId} does not have category with id {item.CategoryId}");
             }

@@ -1,13 +1,12 @@
 ﻿using Core.Domain.AggregatesModel.Categories;
+using Core.Domain.Common;
 
 namespace Core.Domain.AggregatesModel.Users;
 
-public class User
+public class User : EntityBase<UserId>, IAggregateRoot
 {
-    public UserId Id { get; set; }
+    private User() { }
 
-    public Category CreateCategory(string name, CategoryId? parent = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Category CreateCategory(string name, Category? parentCategory = null)
+        => new Category(userId: Id, name, parentCategory);
 }

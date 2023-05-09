@@ -1,7 +1,9 @@
-﻿namespace Core.Domain.AggregatesModel.Users;
+﻿using Core.Domain.Common;
 
-public interface IUserRepository
+namespace Core.Domain.AggregatesModel.Users;
+
+public interface IUserRepository : IRepository<User>
 {
-    Task<User> Get(UserId userId);
-    Task<bool> Contains(UserId userId);
+    Task<User> GetByIdAsync(UserId userId);
+    Task<bool> ContainsAsync(UserId userId);
 }
