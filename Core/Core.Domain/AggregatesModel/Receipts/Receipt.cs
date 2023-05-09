@@ -1,14 +1,13 @@
-﻿using Core.Domain.AggregatesModel.UserAggregate;
+﻿using Core.Domain.AggregatesModel.Users;
 using Core.Domain.Common;
 using Core.Domain.Exceptions;
 
 namespace Core.Domain.AggregatesModel.Receipts;
 
-public class Receipt : IAggregateRoot
+public class Receipt : EntityBase<ReceiptId>, IAggregateRoot
 {
-    public Receipt(ReceiptId receiptId, UserId userId, string shopName, DateTime dateTime, IEnumerable<ReceiptItem> items)
+    public Receipt(UserId userId, string shopName, DateTime dateTime, IEnumerable<ReceiptItem> items)
     {
-        Id = receiptId;
         UserId = userId;
         ShopName = shopName;
         DateTime = dateTime;
@@ -19,7 +18,6 @@ public class Receipt : IAggregateRoot
 
     private readonly List<ReceiptItem> _items = new();
     private string _shopName;
-    public ReceiptId Id { get; private init; }
     public UserId UserId { get; private init; }
     
     public string ShopName

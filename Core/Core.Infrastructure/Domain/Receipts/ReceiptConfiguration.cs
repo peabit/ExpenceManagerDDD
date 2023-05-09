@@ -1,5 +1,6 @@
-﻿using Core.Domain.AggregatesModel.Receipts;
-using Core.Domain.AggregatesModel.UserAggregate;
+﻿using Core.Domain.AggregatesModel.Categories;
+using Core.Domain.AggregatesModel.Receipts;
+using Core.Domain.AggregatesModel.Users;
 using Core.Infrastructure.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -31,6 +32,10 @@ public class ReceiptConfiguration : IEntityTypeConfiguration<Receipt>
             itemsBuilder
                 .Property(i => i.Id)
                 .UseIdFactory(guid => new ReceiptItemId(guid));
+
+            itemsBuilder
+                .Property(i => i.CategoryId)
+                .UseIdFactory(guid => new CategoryId(guid));
 
             itemsBuilder.Ignore(i => i.Coast);
         });

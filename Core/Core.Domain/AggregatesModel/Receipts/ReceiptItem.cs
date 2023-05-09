@@ -1,12 +1,14 @@
-﻿using Core.Domain.Exceptions;
+﻿using Core.Domain.AggregatesModel.Categories;
+using Core.Domain.Common;
+using Core.Domain.Exceptions;
 
 namespace Core.Domain.AggregatesModel.Receipts;
 
-public class ReceiptItem
+public class ReceiptItem : EntityBase<ReceiptItemId>
 {
-    public ReceiptItem(ReceiptItemId id, string name, decimal price, int quantity = 1)
+    public ReceiptItem(CategoryId categoryId, string name, decimal price, int quantity = 1)
     {
-        Id = id;
+        CategoryId = categoryId;
         Name = name;
         Price = price;
         Quantity = quantity;
@@ -17,8 +19,6 @@ public class ReceiptItem
     private string _name;
     private decimal _price;
     private int _quantity;
-
-    public ReceiptItemId Id { get; private init; }
     
     public string Name
     {
@@ -37,6 +37,8 @@ public class ReceiptItem
         get => _quantity;
         private set => _quantity = value > 0 ? value : throw new DomainException("Position quantity cannot be <= 0");
     }
+
+    public CategoryId CategoryId { get; private init; }
 
     public decimal Coast => Price * Quantity;
 

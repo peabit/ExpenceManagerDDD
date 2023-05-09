@@ -4,7 +4,7 @@ using Core.Domain.Common;
 namespace Core.Infrastructure.Domain.Common;
 
 public class IdConverter<T> : ValueConverter<T, string>
-    where T : IdBase
+    where T : EntityIdBase
 {
     public IdConverter(Func<Guid, T> convertFromProviderExpression)
         : base(

@@ -7,7 +7,7 @@ namespace Core.Infrastructure.Domain.Common;
 public static class EntityTypeBuilderExtensions
 {
     public static PropertyBuilder<TEntity> UseIdFactory<TEntity, TId>(this PropertyBuilder<TEntity> propertyBuilder, Func<Guid, TId> idFactory)
-        where TId : IdBase
+        where TId : EntityIdBase
     {
         var converter = new ValueConverter<TId, string>(
             convertFromProviderExpression: id => idFactory(new Guid(id)),
