@@ -1,50 +1,91 @@
-﻿using Core.Domain.AggregatesModel.Users;
+﻿using Core.Domain.Users;
 using Core.Domain.Common;
-using Core.Domain.Exceptions;
 
 namespace Core.Domain.AggregatesModel.Receipts;
 
-public class Receipt : EntityBase<ReceiptId>, IAggregateRoot
+public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
 {
-    public Receipt(UserId userId, string shopName, DateTime dateTime, IEnumerable<ReceiptItem> items)
+    public Receipt(User user, string shopName, DateTime dateTime, IEnumerable<ReceiptItem> items)
     {
-        UserId = userId;
-        ShopName = shopName;
+        User = user ?? throw new ArgumentNullException(nameof(User));
+        ShopName = shopName ?? throw new ArgumentNullException(nameof(ShopName));
         DateTime = dateTime;
-        _items.AddRange(items);
+        Items = items ?? throw new ArgumentNullException(nameof(Items));
     }
 
     private Receipt() { }
 
-    private readonly List<ReceiptItem> _items = new();
+    private readonly List<ReceiptItem> _items;
     private string _shopName;
-    public UserId UserId { get; private init; }
+    private DateTime _dateTime;
+   
+    public User User { get; private init; }
     
     public string ShopName
     {
         get => _shopName;
-        private set => _shopName = !String.IsNullOrWhiteSpace(value) ? value : throw new DomainException("Shop name cannot be empty"); 
+        
+        private set
+        {
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException("Shop name cannot be empty");
+            }
+
+            _shopName = value;
+        }
     }
 
-    public DateTime DateTime { get; private init; }
+    public DateTime DateTime
+    {
+        get => _dateTime;
+
+        set
+        {
+            if (value == DateTime.MinValue)
+            {
+                throw new InvalidOperationException("Date and time cannot be empty");
+            }
+
+            _dateTime = value;
+        }
+    }
+
     public decimal Total => _items.Sum(i => i.Coast);
-    public IEnumerable<ReceiptItem> Items => _items;
+    
+    public IEnumerable<ReceiptItem> Items
+    {
+        get => _items;
+        
+        init
+        {
+            if (value.Count() == 0)
+            {
+                throw new InvalidOperationException("Receipt have to have one or more items");
+            }
+
+            _items = value.ToList();
+        }
+    }
 
     public void ChangeShopNameTo(string newShopName)
         => ShopName = newShopName;
+
+    public void ChangeDateTimeTo(DateTime newDateTime)
+        => DateTime = newDateTime;
 
     public void DeleteItem(ReceiptItem item)
     {
         if (_items.Count == 1)
         {
-            throw new DomainException("Receipt must contain at least one item");
+            throw new InvalidOperationException("Receipt must contain at least one item");
         }
 
         var itemForDelete = _items.FirstOrDefault(i => i.Id == item.Id);
 
         if (itemForDelete is null)
         {
-            throw new DomainException($"Item with id {item.Id} is not in receipt");
+            throw new InvalidOperationException($"Receipt does not have item with id {item.Id}");
         }
 
         _items.Remove(itemForDelete);
@@ -54,7 +95,7 @@ public class Receipt : EntityBase<ReceiptId>, IAggregateRoot
     {
         if (_items.Any(i => i.Id == item.Id))
         {
-            throw new DomainException($"Receipt already contains item with id {item.Id}");
+            throw new InvalidOperationException($"Receipt already contains item with id {item.Id}");
         }
 
         _items.Add(item);

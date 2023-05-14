@@ -1,15 +1,14 @@
 ﻿using Core.Domain.AggregatesModel.Categories;
 using Core.Domain.Common;
-using Core.Domain.Exceptions;
 
 namespace Core.Domain.AggregatesModel.Receipts;
 
-public class ReceiptItem : EntityBase<ReceiptItemId>
+public sealed class ReceiptItem : EntityBase<ReceiptItemId>
 {
     public ReceiptItem(CategoryId categoryId, string name, decimal price, int quantity = 1)
     {
-        CategoryId = categoryId;
-        Name = name;
+        CategoryId = categoryId ?? throw new ArgumentNullException(nameof(CategoryId));
+        Name = name ?? throw new ArgumentNullException(nameof(Name));
         Price = price;
         Quantity = quantity;
     }
@@ -23,19 +22,46 @@ public class ReceiptItem : EntityBase<ReceiptItemId>
     public string Name
     {
         get => _name;
-        private set => _name = !String.IsNullOrWhiteSpace(value) ? value : throw new DomainException("Position name cannot be empty");
+
+        private set
+        {
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException("Position name cannot be empty");
+            }
+
+            _name = value;
+        }
     }
 
     public decimal Price
     {
         get => _price;
-        private set => _price = value >= 0 ? value : throw new DomainException("Position price cannot be negative");
+        
+        private set
+        {
+            if (value < 0)
+            {
+                throw new InvalidOperationException("Position price cannot be negative");
+            }
+
+            _price = value;
+        }
     }
 
     public int Quantity
     {
         get => _quantity;
-        private set => _quantity = value > 0 ? value : throw new DomainException("Position quantity cannot be <= 0");
+        
+        private set
+        {
+            if (value <= 0)
+            {
+                throw new InvalidOperationException("Position quantity cannot be <= 0");
+            }
+
+            _quantity = value;
+        }
     }
 
     public CategoryId CategoryId { get; private init; }

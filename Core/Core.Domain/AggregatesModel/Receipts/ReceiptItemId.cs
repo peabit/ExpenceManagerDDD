@@ -4,6 +4,6 @@ namespace Core.Domain.AggregatesModel.Receipts;
 
 public record ReceiptItemId : EntityIdBase
 {
-    public ReceiptItemId(Guid guid) : base(guid) { }
+    public ReceiptItemId(string id) : base(id) { }
     public ReceiptItemId() : base() { }
 }

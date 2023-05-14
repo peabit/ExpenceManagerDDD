@@ -1,6 +1,5 @@
 ﻿using Core.Domain.AggregatesModel.Categories;
 using Core.Domain.AggregatesModel.Receipts;
-using Core.Domain.AggregatesModel.Users;
 using Core.Infrastructure.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,27 +14,27 @@ public class ReceiptConfiguration : IEntityTypeConfiguration<Receipt>
         builder.HasKey(x => x.Id);
 
         builder
-            .Property(r => r.UserId)
-            .UseIdFactory(guid => new UserId(guid));
-
-        builder
             .Property(r => r.Id)
-            .UseIdFactory(guid => new ReceiptId(guid));
+            .HasConversion(id => new ReceiptId(id));
+
+        builder.OwnsOne(r => r.User, userBuilder =>
+        {
+            userBuilder.Property("_id").HasColumnName("UserId");
+        });
 
         builder.Ignore(r => r.Total);
 
         builder.OwnsMany(r => r.Items, itemsBuilder =>
         {
             itemsBuilder.ToTable("ReceiptItems");
-            itemsBuilder.HasKey(i => i.Id);
 
             itemsBuilder
                 .Property(i => i.Id)
-                .UseIdFactory(guid => new ReceiptItemId(guid));
+                .HasConversion(id => new ReceiptItemId(id));
 
             itemsBuilder
                 .Property(i => i.CategoryId)
-                .UseIdFactory(guid => new CategoryId(guid));
+                .HasConversion(id => new CategoryId(id));
 
             itemsBuilder.Ignore(i => i.Coast);
         });

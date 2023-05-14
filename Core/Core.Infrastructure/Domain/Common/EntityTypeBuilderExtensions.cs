@@ -6,11 +6,11 @@ namespace Core.Infrastructure.Domain.Common;
 
 public static class EntityTypeBuilderExtensions
 {
-    public static PropertyBuilder<TEntity> UseIdFactory<TEntity, TId>(this PropertyBuilder<TEntity> propertyBuilder, Func<Guid, TId> idFactory)
+    public static PropertyBuilder<TEntity> HasConversion<TEntity, TId>(this PropertyBuilder<TEntity> propertyBuilder, Func<string, TId> idFactory)
         where TId : EntityIdBase
     {
         var converter = new ValueConverter<TId, string>(
-            convertFromProviderExpression: id => idFactory(new Guid(id)),
+            convertFromProviderExpression: id => idFactory(id),
             convertToProviderExpression: id => id.ToString()
         );
 

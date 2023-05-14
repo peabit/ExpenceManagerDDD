@@ -4,10 +4,11 @@ public abstract record EntityIdBase
 {
     private readonly Guid _guid;
 
-    public EntityIdBase(Guid guid)
-        => _guid = guid;
+    public EntityIdBase(string id)
+        => _guid = new Guid(id);
 
-    internal EntityIdBase() : this(Guid.NewGuid()) { }
+    internal EntityIdBase() 
+        => _guid = Guid.NewGuid();
 
     public override int GetHashCode()
         => _guid.GetHashCode();
