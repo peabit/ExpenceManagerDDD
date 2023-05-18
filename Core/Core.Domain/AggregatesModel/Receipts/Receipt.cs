@@ -59,7 +59,7 @@ public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
         
         init
         {
-            if (value.Count() == 0)
+            if (!value.Any())
             {
                 throw new InvalidOperationException("Receipt have to have one or more items");
             }

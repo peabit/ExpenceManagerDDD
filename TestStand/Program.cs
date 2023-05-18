@@ -3,26 +3,31 @@ using Core.Domain.Users;
 using Core.Infrastructure;
 using Core.Infrastructure.Domain.Common;
 using Core.Domain.AggregatesModel.Categories;
+using Core.Infrastructure.Domain.Receipts;
+using Core.Infrastructure.Domain.Categories;
+using Core.Application.Rceipts.CreateReceipt;
+using Core.Infrastructure.Domain.Users;
 
-var user = new User("01");
-var category = new Category(user, "Выпечка");
+var db = new CoreDbContext();
 
-var items = new List<ReceiptItem>()
+var receiptrepository = new ReceiptRepository(db);
+var categoryRepository = new CategoryRepository(db);
+var userProvider = new FakeUserProvider();
+
+var user = new User("555");
+categoryRepository.AddAsync(new Category(user, "ХБ"));
+
+var createReceiptCommandHandler = new CreateReceiptCommandHandler(userProvider, receiptrepository, categoryRepository);
+
+var category = db.Categories.First();
+
+var items = new List<ReceiptItemDto>()
 {
-    category.CreateReceiptItem("Булочка с маком", 45),
-    category.CreateReceiptItem("Булочка с изюмом", 55)
+    new ReceiptItemDto(category.Id.ToString(), "", 25, 1),
+    new ReceiptItemDto(category.Id.ToString(), "Булочка с корицей", 30, 1)
 };
 
-var receipt = new Receipt(user, "Вкусвил", DateTime.Now, items);
+createReceiptCommandHandler.Handle(new CreateReceiptCommand("555", "Пятёрочка", DateTime.Now, items));
 
-var db = new SqliteContext();
-db.Receipts.Add(receipt);
-db.SaveChanges();
-
-db.Dispose();
-db = null;
-db = new SqliteContext();
-
-var readedReceipt = db.Receipts.First();
-
+var createdReceipt = db.Receipts.First();
 _ = 0;
