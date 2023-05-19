@@ -1,5 +1,6 @@
 ﻿using Core.Domain.AggregatesModel.Categories;
 using Core.Domain.Common;
+using Core.Domain.Exceptions;
 
 namespace Core.Domain.AggregatesModel.Receipts;
 
@@ -27,7 +28,7 @@ public sealed class ReceiptItem : EntityBase<ReceiptItemId>
         {
             if (String.IsNullOrWhiteSpace(value))
             {
-                throw new InvalidOperationException("Position name cannot be empty");
+                throw new DomainException("Position name cannot be empty");
             }
 
             _name = value;
@@ -42,7 +43,7 @@ public sealed class ReceiptItem : EntityBase<ReceiptItemId>
         {
             if (value < 0)
             {
-                throw new InvalidOperationException("Position price cannot be negative");
+                throw new DomainException("Position price cannot be negative");
             }
 
             _price = value;
@@ -57,7 +58,7 @@ public sealed class ReceiptItem : EntityBase<ReceiptItemId>
         {
             if (value <= 0)
             {
-                throw new InvalidOperationException("Position quantity cannot be <= 0");
+                throw new DomainException("Position quantity cannot be <= 0");
             }
 
             _quantity = value;

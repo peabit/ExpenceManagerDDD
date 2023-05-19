@@ -1,5 +1,6 @@
 ﻿using Core.Domain.Users;
 using Core.Domain.Common;
+using Core.Domain.Exceptions;
 
 namespace Core.Domain.AggregatesModel.Receipts;
 
@@ -29,7 +30,7 @@ public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
         {
             if (String.IsNullOrWhiteSpace(value))
             {
-                throw new InvalidOperationException("Shop name cannot be empty");
+                throw new DomainException("Shop name cannot be empty");
             }
 
             _shopName = value;
@@ -44,7 +45,7 @@ public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
         {
             if (value == DateTime.MinValue)
             {
-                throw new InvalidOperationException("Date and time cannot be empty");
+                throw new DomainException("Date and time cannot be empty");
             }
 
             _dateTime = value;
@@ -61,31 +62,31 @@ public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
         {
             if (!value.Any())
             {
-                throw new InvalidOperationException("Receipt have to have one or more items");
+                throw new DomainException("Receipt have to have one or more items");
             }
 
             _items = value.ToList();
         }
     }
 
-    public void ChangeShopNameTo(string newShopName)
-        => ShopName = newShopName;
+    public void ChangeShopNameTo(string newShopName) =>
+        ShopName = newShopName;
 
-    public void ChangeDateTimeTo(DateTime newDateTime)
-        => DateTime = newDateTime;
+    public void ChangeDateTimeTo(DateTime newDateTime) => 
+        DateTime = newDateTime;
 
-    public void DeleteItem(ReceiptItem item)
+    public void DeleteItem(ReceiptItemId itemId)
     {
         if (_items.Count == 1)
         {
-            throw new InvalidOperationException("Receipt must contain at least one item");
+            throw new DomainException("Receipt must contain at least one item");
         }
 
-        var itemForDelete = _items.FirstOrDefault(i => i.Id == item.Id);
+        var itemForDelete = _items.FirstOrDefault(i => i.Id == itemId);
 
         if (itemForDelete is null)
         {
-            throw new InvalidOperationException($"Receipt does not have item with id {item.Id}");
+            throw new NotFoundException($"Receipt does not have item with id {itemId}");
         }
 
         _items.Remove(itemForDelete);
@@ -95,7 +96,7 @@ public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
     {
         if (_items.Any(i => i.Id == item.Id))
         {
-            throw new InvalidOperationException($"Receipt already contains item with id {item.Id}");
+            throw new DomainException($"Receipt already contains item with id {item.Id}");
         }
 
         _items.Add(item);

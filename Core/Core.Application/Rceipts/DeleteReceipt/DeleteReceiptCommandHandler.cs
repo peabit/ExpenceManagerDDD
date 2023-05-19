@@ -1,0 +1,15 @@
+﻿using Core.Domain.AggregatesModel.Receipts;
+using Core.Domain.Users;
+
+namespace Core.Application.Rceipts.DeleteReceipt;
+
+public sealed class DeleteReceiptCommandHandler
+{
+    private IReceiptRepository _receiptRepository;
+
+    public DeleteReceiptCommandHandler(IReceiptRepository receiptRepository) => 
+        _receiptRepository = receiptRepository;
+
+    public async Task Handle (DeleteReceiptCommand command) =>
+        await _receiptRepository.DeleteAsync(new User(command.UserId), new ReceiptId(command.ReceiptId));
+}

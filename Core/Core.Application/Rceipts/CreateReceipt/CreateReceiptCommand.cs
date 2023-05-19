@@ -1,4 +1,6 @@
-﻿namespace Core.Application.Rceipts.CreateReceipt;
+﻿using Core.Application.Receipts.Common;
+
+namespace Core.Application.Rceipts.CreateReceipt;
 
 public sealed record CreateReceiptCommand
 {
@@ -10,8 +12,8 @@ public sealed record CreateReceiptCommand
         Items = items;
     }
 
-    public string UserId { get; private set; }
-    public string ShopName { get; private set; }
-    public DateTime DateTime { get; private set; }
-    public IEnumerable<ReceiptItemDto> Items { get; private set; }
+    public string UserId { get; private init; }
+    public string ShopName { get; private init; }
+    public DateTime DateTime { get; private init; }
+    public IEnumerable<ReceiptItemDto> Items { get; private init; }
 }

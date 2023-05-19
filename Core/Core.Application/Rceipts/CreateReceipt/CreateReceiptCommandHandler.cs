@@ -2,10 +2,11 @@
 using Core.Domain.AggregatesModel.Receipts;
 using Core.Domain.AggregatesModel.Categories;
 using Core.Domain.Exceptions;
+using Core.Application.Receipts.Common;
 
 namespace Core.Application.Rceipts.CreateReceipt;
 
-public class CreateReceiptCommandHandler
+public sealed class CreateReceiptCommandHandler
 {
     private readonly IUserProvider _userProvider;
     private readonly IReceiptRepository _receiptRepository;

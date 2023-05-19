@@ -1,4 +1,4 @@
-﻿namespace Core.Application.Rceipts.CreateReceipt;
+﻿namespace Core.Application.Receipts.Common;
 
 public sealed record ReceiptItemDto
 {
@@ -14,5 +14,4 @@ public sealed record ReceiptItemDto
     public string Name { get; private set; }
     public decimal Price { get; private set; }
     public int Quantity { get; private set; }
-
 }

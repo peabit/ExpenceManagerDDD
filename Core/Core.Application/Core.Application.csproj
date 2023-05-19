@@ -7,12 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Rceipts\DeleteReceipt\" />
-    <Folder Include="Rceipts\ChangeReceipt\" />
-    <Folder Include="ReceiptItems\GetReceiptItems\" />
-    <Folder Include="ReceiptItems\DeleteReceiptItem\" />
-    <Folder Include="ReceiptItems\AddReceiptItem\" />
-    <Folder Include="ReceiptItems\ChangeReceiptItem\" />
+    <Folder Include="Rceipts\DeleteReceiptItem\" />
     <Folder Include="Reports\GetTotalExpensesByCategoryReport\" />
   </ItemGroup>
 

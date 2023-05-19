@@ -1,6 +1,7 @@
 ﻿using Core.Domain.AggregatesModel.Receipts;
 using Core.Domain.Users;
 using Core.Domain.Common;
+using Core.Domain.Exceptions;
 
 namespace Core.Domain.AggregatesModel.Categories;
 
@@ -28,7 +29,7 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
         {
             if (String.IsNullOrWhiteSpace(value))
             {
-                throw new InvalidOperationException("Category name cannot be empty");
+                throw new DomainException("Category name cannot be empty");
             }
 
             _name = value;
@@ -43,7 +44,7 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
         {
             if (value == Id)
             {
-                throw new InvalidOperationException("Сategory cannot be a parent to itself");
+                throw new DomainException("Сategory cannot be a parent to itself");
             }
 
             _parentId = value;
@@ -63,5 +64,5 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
         => ParentId = parentCategory.Id ?? throw new ArgumentNullException(nameof(parentCategory));
 
     public void UnlinkFromParentCategory()
-        => _parentId = HasParentCategory() ? null : throw new InvalidOperationException("Category has no parent");
+        => _parentId = HasParentCategory() ? null : throw new DomainException("Category has no parent");
 }
