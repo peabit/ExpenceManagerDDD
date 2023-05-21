@@ -1,8 +1,8 @@
 ﻿namespace Core.Application.Receipts.Common;
 
-public sealed record ReceiptItemDto
+public sealed record NewReceiptItemDto
 {
-    public ReceiptItemDto(string categoryId, string name, decimal price, int quantity)
+    public NewReceiptItemDto(string categoryId, string name, decimal price, int quantity)
     {
         CategoryId = categoryId;
         Name = name;

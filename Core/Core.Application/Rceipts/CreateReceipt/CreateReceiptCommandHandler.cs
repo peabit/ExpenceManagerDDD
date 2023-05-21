@@ -33,7 +33,7 @@ public sealed class CreateReceiptCommandHandler : ICommandHandler<CreateReceiptC
         await _receiptRepository.AddAsync(receipt);
     }
 
-    private async Task<IEnumerable<ReceiptItem>> CreateItems(User user, IEnumerable<ReceiptItemDto> itemDtos)
+    private async Task<IEnumerable<ReceiptItem>> CreateItems(User user, IEnumerable<NewReceiptItemDto> itemDtos)
     {
         var items = new List<ReceiptItem>();
 

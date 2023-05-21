@@ -1,31 +1,21 @@
 ﻿using Core.Application.Common;
+using Core.Application.Rceipts.Common;
 
 namespace Core.Application.Rceipts.FindReceiptsByPeriod;
 
 public sealed class FindReceiptsByPeriodQueryHandler 
-    : IQueryHandler<FindReceiptsByPeriodQuery, IEnumerable<ReceiptDto>>
+    : IQueryHandler<FindReceiptsByPeriodQuery, IEnumerable<ReceiptHeaderDto>>
 {
     private readonly ISqlQueryExecutor _queryExecutor;
 
     public FindReceiptsByPeriodQueryHandler(ISqlQueryExecutor queryExecutor) 
         => _queryExecutor = queryExecutor ?? throw new ArgumentNullException(nameof(queryExecutor));
 
-    public Task Handle(FindReceiptsByPeriodQuery command)
+    public async Task<IEnumerable<ReceiptHeaderDto>> Query(FindReceiptsByPeriodQuery query)
     {
-        throw new NotImplementedException();
-    }
-
-    public async Task<IEnumerable<ReceiptDto>> Query(FindReceiptsByPeriodQuery query)
-    {
-        var paramters = new
-        {
-            From = query.From,
-            To = query.To
-        };
-
         var sqlQuery = """
             WITH 
-                Coasts AS (
+                Total AS (
         	        SELECT
         		        Receipts.Id AS ReceiptId,
         		        SUM( ReceiptItems.Quantity * ReceiptItems.Price ) AS Value
@@ -33,20 +23,19 @@ public sealed class FindReceiptsByPeriodQueryHandler
         	        JOIN ReceiptItems
         	          ON Receipts.Id = ReceiptItems.ReceiptId
                     WHERE Receipts.DateTime BETWEEN @From AND @To 
-        	        GROUP BY 
-        	        	Receipts.Id		
+                      AND Receipts.UserId = @UserId
+        	        GROUP BY Receipts.Id		
                 )
             SELECT
                 Receipts.Id,
             	Receipts.ShopName,
             	Receipts.DateTime,
-            	Coasts.Value AS Coast
+            	Total.Value AS Total
             FROM Receipts
-            JOIN Coasts
-              ON Receipts.Id = Coasts.ReceiptId
+            JOIN Total
+              ON Receipts.Id = Total.ReceiptId
         """;
 
-        var receipts = await _queryExecutor.Query<ReceiptDto>(sqlQuery, paramters);
-        return receipts;
+        return await _queryExecutor.Query<ReceiptHeaderDto>(sqlQuery, query);
     }
 }
