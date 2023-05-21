@@ -8,8 +8,8 @@ public sealed class ReceiptItem : EntityBase<ReceiptItemId>
 {
     public ReceiptItem(CategoryId categoryId, string name, decimal price, int quantity = 1)
     {
-        CategoryId = categoryId ?? throw new ArgumentNullException(nameof(CategoryId));
-        Name = name ?? throw new ArgumentNullException(nameof(Name));
+        CategoryId = categoryId ?? throw new ArgumentNullException(nameof(categoryId));
+        Name = name ?? throw new ArgumentNullException(nameof(name));
         Price = price;
         Quantity = quantity;
     }

@@ -1,19 +1,15 @@
-﻿using Core.Application.Rceipts.Common;
-using Core.Domain.AggregatesModel.Receipts;
+﻿using Core.Application.Common;
+using Core.Application.Rceipts.Common;
 
 namespace Core.Application.Rceipts.ChangeReceiptShopName;
 
-public sealed class ChangeReceiptShopNameCommandHandler
+public sealed class ChangeReceiptShopNameCommandHandler : ICommandHandler<ChangeReceiptShopNameCommand>
 {
-    private IReceiptRepository _receiptRepository;
+    private ReceiptChanger _receiptChanger;
 
-    public ChangeReceiptShopNameCommandHandler(IReceiptRepository receiptRepository) =>
-        _receiptRepository = receiptRepository;
+    public ChangeReceiptShopNameCommandHandler(ReceiptChanger receiptChanger)
+        => _receiptChanger = receiptChanger;
 
-    public async Task ChangeReceiptShopName(ChangeReceiptShopNameCommand command)
-    {
-        var receipt = await _receiptRepository.GetForManipulateCommandAsync(command);
-        receipt.ChangeShopNameTo(command.NewShopName);
-        await _receiptRepository.UpdateAsync(receipt);
-    }
+    public async Task Handle(ChangeReceiptShopNameCommand command)
+        => await _receiptChanger.Change(command, receipt => receipt.ChangeShopNameTo(command.NewShopName));
 }

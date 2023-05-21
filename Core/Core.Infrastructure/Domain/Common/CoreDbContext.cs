@@ -4,6 +4,7 @@ using Core.Infrastructure.Domain.Categories;
 using Core.Infrastructure.Domain.Receipts;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Core.Infrastructure.Domain.Common;
 
 public class CoreDbContext : DbContext

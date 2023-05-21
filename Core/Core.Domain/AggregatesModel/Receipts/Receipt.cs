@@ -82,13 +82,7 @@ public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
             throw new DomainException("Receipt must contain at least one item");
         }
 
-        var itemForDelete = _items.FirstOrDefault(i => i.Id == itemId);
-
-        if (itemForDelete is null)
-        {
-            throw new NotFoundException($"Receipt does not have item with id {itemId}");
-        }
-
+        var itemForDelete = GetItem(itemId);
         _items.Remove(itemForDelete);
     }
 
@@ -100,5 +94,17 @@ public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
         }
 
         _items.Add(item);
+    }
+
+    public ReceiptItem GetItem(ReceiptItemId id)
+    {
+        var item = _items.FirstOrDefault(i => i.Id == id);
+
+        if (item is null)
+        {
+            throw new NotFoundException($"Receipt does not have item with id {id}");
+        }
+
+        return item;
     }
 }

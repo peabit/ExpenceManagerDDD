@@ -3,10 +3,11 @@ using Core.Domain.AggregatesModel.Receipts;
 using Core.Domain.AggregatesModel.Categories;
 using Core.Domain.Exceptions;
 using Core.Application.Receipts.Common;
+using Core.Application.Common;
 
 namespace Core.Application.Rceipts.CreateReceipt;
 
-public sealed class CreateReceiptCommandHandler
+public sealed class CreateReceiptCommandHandler : ICommandHandler<CreateReceiptCommand>
 {
     private readonly IUserProvider _userProvider;
     private readonly IReceiptRepository _receiptRepository;
@@ -19,7 +20,7 @@ public sealed class CreateReceiptCommandHandler
         _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
     }
 
-    public async void Handle(CreateReceiptCommand command)
+    public async Task Handle(CreateReceiptCommand command)
     {
         if (!command.Items.Any())
         {

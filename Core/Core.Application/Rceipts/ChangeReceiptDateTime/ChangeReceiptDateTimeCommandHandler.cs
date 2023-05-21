@@ -1,20 +1,15 @@
-﻿using Core.Application.Rceipts.Common;
-using Core.Domain.AggregatesModel.Receipts;
-using Core.Domain.Users;
+﻿using Core.Application.Common;
+using Core.Application.Rceipts.Common;
 
 namespace Core.Application.Rceipts.ChangeReceiptDateTime;
 
-public sealed class ChangeReceiptDateTimeCommandHandler
+public sealed class ChangeReceiptDateTimeCommandHandler : ICommandHandler<ChangeReceiptDateTimeCommand>
 {
-    private readonly IReceiptRepository _receiptRepository;
+    private readonly ReceiptChanger _changer;
 
-    public ChangeReceiptDateTimeCommandHandler(IReceiptRepository receiptRepository) =>
-        _receiptRepository = receiptRepository;
+    public ChangeReceiptDateTimeCommandHandler(ReceiptChanger changer)
+        => _changer = changer;
 
     public async Task Handle(ChangeReceiptDateTimeCommand command)
-    {
-        var receipt = await _receiptRepository.GetForManipulateCommandAsync(command);
-        receipt.ChangeDateTimeTo(command.NewDateTime);
-        await _receiptRepository.UpdateAsync(receipt);
-    }
+        => await _changer.Change(command, receipt => receipt.ChangeDateTimeTo(command.NewDateTime));
 }
