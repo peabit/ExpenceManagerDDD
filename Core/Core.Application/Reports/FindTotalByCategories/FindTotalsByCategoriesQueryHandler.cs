@@ -2,14 +2,15 @@
 
 namespace Core.Application.Reports.FindTotalByCategories;
 
-public sealed class FindTotalsByCategoriesQueryHandler
+public sealed class FindTotalsByCategoriesQueryHandler 
+    : IQueryHandler<FindTotalsByCategoriesQuery, TotalsByCategoriesDto>
 {
     private readonly ISqlQueryExecutor _sqlQueryExecutor;
 
     public FindTotalsByCategoriesQueryHandler(ISqlQueryExecutor sqlQueryExecutor) 
         => _sqlQueryExecutor = sqlQueryExecutor ?? throw new ArgumentNullException(nameof(sqlQueryExecutor));
 
-    public async Task<IEnumerable<TotalByCategoryDto>> Query(FindTotalsByCategoriesQuery query)
+    public async Task<TotalsByCategoriesDto> Query(FindTotalsByCategoriesQuery query)
     {
         var sqlQuery = """
             WITH 
@@ -29,13 +30,14 @@ public sealed class FindTotalsByCategoriesQueryHandler
 
         		    FROM ChildCategories
         		    JOIN Categories
-        		      ON ChildCategories.ChildId = Categories.ParentId
+                        ON Categories.ParentId = ChildCategories.ChildId
         	    ),
         	    CategoryBranches AS (
         		    SELECT 
         			    ChildCategories.ParentId AS StartCategoryId,
         			    ChildCategories.ChildId  AS CategoryId	
-        		    FROM ChildCategories
+        		    
+                    FROM ChildCategories
 
         		    UNION ALL
 
@@ -51,15 +53,22 @@ public sealed class FindTotalsByCategoriesQueryHandler
 
             FROM ReceiptItems
 
+            JOIN Receipts
+                ON Receipts.Id = ReceiptItems.ReceiptId
+
             JOIN CategoryBranches
-              ON ReceiptItems.CategoryId = CategoryBranches.CategoryId
+                ON CategoryBranches.CategoryId = ReceiptItems.CategoryId
 
             JOIN Categories
-              ON Categories.Id = CategoryBranches.StartCategoryId
+                ON Categories.Id = CategoryBranches.StartCategoryId
+
+            WHERE Receipts.DateTime BETWEEN @From AND @To
+                AND Receipts.UserId = @UserId
 
             GROUP BY Category
         """;
 
-        return await _sqlQueryExecutor.Query<TotalByCategoryDto>(sqlQuery, query);
+        var totals = await _sqlQueryExecutor.Query<TotalByCategoryDto>(sqlQuery, query);
+        return new TotalsByCategoriesDto(query.From, query.To, totals);
     }
 }
