@@ -4,11 +4,12 @@ using Core.Infrastructure.Domain.Common;
 using Core.Application.Common;
 using System.Linq;
 using Core.Application.Rceipts.GetReceipt;
+using Core.Application.Reports.FindTotalByCategories;
 
 var connectionFactory = new SqliteConnectionFactory("Data source = test.db");
 var sqlQueryExecutor = new SqlQueryExecutor(connectionFactory);
-var queryHandler = new GetReceiptQueryHandler(sqlQueryExecutor);
+var queryHandler = new FindTotalsByCategoriesQueryHandler(sqlQueryExecutor);
 
-var receipts = await queryHandler.Query(new GetReceiptQuery("555", "59ac531b-d857-4e3d-bbf1-1c05a8737e46"));
+var report = await queryHandler.Query(new FindTotalsByCategoriesQuery("", DateTime.Now, DateTime.Now, new []{ "WW1", "W" }));
 
 _ = 0;

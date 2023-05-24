@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Reports\GetTotalExpensesByCategoryReport\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
   </ItemGroup>
 
