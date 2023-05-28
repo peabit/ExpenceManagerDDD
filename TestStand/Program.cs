@@ -8,14 +8,15 @@ using Core.Application.Reports.FindTotalsByCategories;
 using Dapper;
 using Core.Application.Categories.Common;
 using Core.Application.Categories.GetCategory;
+using Core.Application.Categories.UnlinkCategoryFromParent;
+using Core.Infrastructure.Domain.Categories;
 
-var db = new CoreDbContext();
-db.Receipts.Find(new[] { "59ac531b-d857-4e3d-bbf1-1c05a8737e18", "555" });
+var qwd = Guid.NewGuid().ToString();    
 
+var q = new CategoryRepository(new CoreDbContext());
+var categoryChanger = new CategoryChanger(q);
+var queryHandler = new UnlinkCategoryFromParentCommandHandler(categoryChanger);
 
-//var connectionFactory = new SqliteConnectionFactory("Data source = test.db");
-//var sqlQueryExecutor = new SqlQueryExecutor(connectionFactory);
-//var queryHandler = new GetCategoryQueryHandler(sqlQueryExecutor);
-//var report = await queryHandler.Query(new GetCategoryQuery("h555", "S1"));
+await queryHandler.Handle(new UnlinkCategoryFromParentCommand("d32ab209-fe90-43ae-9930-d8e18b930737", "4d742c18-db6b-4e55-ac0d-2a239f8c195a"));
 
 _ = 0;

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Application.Categories.Common;
 
-namespace Core.Application.Categories.LinkCategoryToParent
-{
-    internal class LinkCategoryToParentCommand
-    {
-    }
-}
+namespace Core.Application.Categories.LinkCategoryToParent;
+
+public sealed record LinkCategoryToParentCommand(
+    string UserId, 
+    string CategoryId,
+    string ParentCategoryId
+)
+: ManipulateCategoryCommand(UserId, CategoryId);

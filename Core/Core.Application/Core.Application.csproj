@@ -10,10 +10,4 @@
     <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Categories\LinkCategoryToParent\" />
-    <Folder Include="Categories\UnlinkCategoryFromParent\" />
-    <Folder Include="Categories\RenameCategory\" />
-  </ItemGroup>
-
 </Project>

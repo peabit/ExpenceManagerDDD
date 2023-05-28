@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Application.Categories.Common;
 
-namespace Core.Application.Categories.RenameCategory
-{
-    internal class RenameCategoryCommand
-    {
-    }
-}
+namespace Core.Application.Categories.RenameCategory;
+
+public sealed record RenameCategoryCommand(
+    string UserId,
+    string CategoryId,
+    string NewName
+)
+: ManipulateCategoryCommand(UserId, CategoryId);

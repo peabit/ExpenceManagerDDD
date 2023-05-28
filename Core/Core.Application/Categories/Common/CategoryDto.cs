@@ -3,8 +3,8 @@
 public sealed record CategoryDto(
     string Id,
     string Name,
-    string ParentId,
-    string ParentName
+    string ParentCategoryId,
+    string ParentCategoryName
 )
 {
     // For Dapper

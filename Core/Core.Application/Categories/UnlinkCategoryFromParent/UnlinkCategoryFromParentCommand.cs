@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Application.Categories.Common;
 
-namespace Core.Application.Categories.UnlinkCategoryFromParent
-{
-    internal class UnlinkCategoryFromParentCommand
-    {
-    }
-}
+namespace Core.Application.Categories.UnlinkCategoryFromParent;
+
+public sealed record UnlinkCategoryFromParentCommand(
+    string UserId,
+    string CategoryId
+)
+: ManipulateCategoryCommand(UserId, CategoryId);

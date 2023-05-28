@@ -18,8 +18,8 @@ public sealed class GetAllCategoriesQueryHandler
             SELECT
                 Categories.Id,
                 Categories.Name,
-                Categories.ParentId,
-                ParentCategories.Name AS ParentName
+                Categories.ParentCategoryId,
+                ParentCategories.Name AS ParentCategoryName
 
             FROM Categories
 

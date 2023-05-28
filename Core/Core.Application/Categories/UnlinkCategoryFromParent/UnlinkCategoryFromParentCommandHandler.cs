@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Application.Categories.Common;
+using Core.Application.Common;
 
-namespace Core.Application.Categories.UnlinkCategoryFromParent
+namespace Core.Application.Categories.UnlinkCategoryFromParent;
+
+public sealed class UnlinkCategoryFromParentCommandHandler : ICommandHandler<UnlinkCategoryFromParentCommand>
 {
-    internal class UnlinkCategoryFromParentCommandHandler
-    {
-    }
+    private readonly CategoryChanger _categoryChanger;
+
+    public UnlinkCategoryFromParentCommandHandler(CategoryChanger categoryChanger) 
+        => _categoryChanger = categoryChanger ?? throw new ArgumentNullException(nameof(categoryChanger));
+
+    public async Task Handle(UnlinkCategoryFromParentCommand command)
+        => await _categoryChanger.Change(command, c => c.UnlinkFromParentCategory());
 }
