@@ -1,11 +1,11 @@
 ﻿using Core.Application.Receipts.Common;
 
-namespace Core.Application.Receipts.RenameReceiptItem;
+namespace Core.Application.Receipts.Items.ChangeReceiptItemCategory;
 
-public sealed record RenameReceiptItemCommand(
+public sealed record ChangeReceiptItemCategoryCommand(
     string UserId,
     string ReceiptId,
     string ItemId,
-    string NewName
-) 
+    string NewCategoryId
+)
 : ManipulateReceiptItemCommand(UserId, ReceiptId, ItemId);

@@ -19,6 +19,7 @@ public sealed class ReceiptItem : EntityBase<ReceiptItemId>
     private string _name;
     private decimal _price;
     private int _quantity;
+    private CategoryId _categoryId;
     
     public string Name
     {
@@ -65,7 +66,20 @@ public sealed class ReceiptItem : EntityBase<ReceiptItemId>
         }
     }
 
-    public CategoryId CategoryId { get; private init; }
+    public CategoryId CategoryId
+    {
+        get => _categoryId;
+
+        private set
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            _categoryId = value;
+        }
+    }
 
     public decimal Coast => Price * Quantity;
 
@@ -77,4 +91,7 @@ public sealed class ReceiptItem : EntityBase<ReceiptItemId>
 
     public void ChangeNameTo(string newName)
         => Name = newName;
+
+    public void ChangeCategoryTo(Category newCategory)
+        => CategoryId = newCategory.Id ?? throw new ArgumentNullException(nameof(newCategory));
 }

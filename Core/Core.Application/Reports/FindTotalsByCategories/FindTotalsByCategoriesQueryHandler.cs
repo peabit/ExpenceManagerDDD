@@ -1,6 +1,6 @@
 ﻿using Core.Application.Common;
 
-namespace Core.Application.Reports.FindTotalByCategories;
+namespace Core.Application.Reports.FindTotalsByCategories;
 
 public sealed class FindTotalsByCategoriesQueryHandler 
     : IQueryHandler<FindTotalsByCategoriesQuery, TotalsByCategoriesDto>

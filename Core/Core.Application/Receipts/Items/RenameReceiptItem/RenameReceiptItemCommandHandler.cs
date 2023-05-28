@@ -1,7 +1,7 @@
 ﻿using Core.Application.Common;
 using Core.Application.Receipts.Common;
 
-namespace Core.Application.Receipts.RenameReceiptItem;
+namespace Core.Application.Receipts.Items.RenameReceiptItem;
 
 public sealed class RenameReceiptItemCommandHandler : ICommandHandler<RenameReceiptItemCommand>
 {

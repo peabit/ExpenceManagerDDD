@@ -1,7 +1,7 @@
 ﻿using Core.Application.Common;
 using Core.Application.Receipts.Common;
 
-namespace Core.Application.Receipts.ChangeReceiptItemPrice;
+namespace Core.Application.Receipts.Items.ChangeReceiptItemPrice;
 
 public class ChangeReceiptItemPriceCommandHandler : ICommandHandler<ChangeReceiptItemPriceCommand>
 {

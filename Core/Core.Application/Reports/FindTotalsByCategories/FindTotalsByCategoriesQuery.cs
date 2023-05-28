@@ -1,4 +1,4 @@
-﻿namespace Core.Application.Reports.FindTotalByCategories;
+﻿namespace Core.Application.Reports.FindTotalsByCategories;
 
 public sealed record FindTotalsByCategoriesQuery(
     string UserId,

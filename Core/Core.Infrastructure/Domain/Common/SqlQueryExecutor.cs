@@ -29,8 +29,8 @@ public sealed class SqlQueryExecutor : ISqlQueryExecutor, IDisposable
     public async Task<IEnumerable<TResult>> Query<TResult>(string query, object parameters)
         => await Connection.QueryAsync<TResult>(query, parameters);
 
-    public async Task<TResult> QuerySingle<TResult>(string query, object parameters)
-        => await Connection.QuerySingleAsync<TResult>(query, parameters);
+    public async Task<TResult> QueryFirstOrDefault<TResult>(string query, object parameters)
+        => await Connection.QueryFirstOrDefaultAsync<TResult>(query, parameters);
 
     public void Dispose()
         => _connection?.Dispose();

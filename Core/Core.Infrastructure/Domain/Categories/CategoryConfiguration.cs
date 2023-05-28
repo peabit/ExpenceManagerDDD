@@ -22,6 +22,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
         builder
             .Property(c => c.User)
+            .HasColumnName("UserId")
             .HasConversion(id => new User(id)); 
     }
 }

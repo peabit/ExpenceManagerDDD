@@ -30,7 +30,7 @@ public sealed class GetReceiptQueryHandler
                     UserId = @UserId
             """;
 
-        return await _queryExecutor.QuerySingle<ReceiptHeaderDto>(sqlQuery, parameters: query);
+        return await _queryExecutor.QueryFirstOrDefault<ReceiptHeaderDto>(sqlQuery, parameters: query);
     }
 
     private async Task<IEnumerable<ReceiptItemDto>> ReadItems(GetReceiptQuery query)
