@@ -1,7 +1,7 @@
 ﻿namespace Core.Application.Reports.FindTotalByCategories;
 
-public sealed record TotalByCategoryDto
+public sealed record TotalByCategoryDto(string Category, decimal Total)
 {
-    public string Category { get; init; }
-    public decimal Total { get; init; }
+    // For Dapper
+    private TotalByCategoryDto() : this(default!, default) { }
 }
