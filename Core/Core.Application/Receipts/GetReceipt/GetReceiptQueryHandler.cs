@@ -1,4 +1,5 @@
-﻿using Core.Application.Common;
+﻿using Core.Domain.Exceptions;
+using Core.Application.Common;
 using Core.Application.Receipts.Common;
 
 namespace Core.Application.Receipts.GetReceipt;
@@ -11,9 +12,17 @@ public sealed class GetReceiptQueryHandler
     public GetReceiptQueryHandler(ISqlQueryExecutor queryExecutor) 
         => _queryExecutor = queryExecutor ?? throw new ArgumentNullException(nameof(queryExecutor));
 
-    public async Task<ReceiptDto> Query(GetReceiptQuery query)
+    public async Task<ReceiptDto> Handle(GetReceiptQuery query)
     {
         var headerDraft = await ReadHeaderDarft(query);
+
+        if (headerDraft is null)
+        {
+            throw new NotFoundException(
+                $"User with id {query.UserId} does not have receipt with id {query.ReceiptId}"
+            );
+        }
+
         var items = await ReadItems(query);
         var header = headerDraft with { Total = items.Sum(i => i.Coast) };
         

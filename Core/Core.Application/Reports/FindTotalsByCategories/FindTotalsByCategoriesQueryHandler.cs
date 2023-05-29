@@ -10,7 +10,7 @@ public sealed class FindTotalsByCategoriesQueryHandler
     public FindTotalsByCategoriesQueryHandler(ISqlQueryExecutor sqlQueryExecutor) 
         => _sqlQueryExecutor = sqlQueryExecutor ?? throw new ArgumentNullException(nameof(sqlQueryExecutor));
 
-    public async Task<TotalsByCategoriesDto> Query(FindTotalsByCategoriesQuery query)
+    public async Task<TotalsByCategoriesDto> Handle(FindTotalsByCategoriesQuery query)
     {
         var sqlQuery = """
             WITH 

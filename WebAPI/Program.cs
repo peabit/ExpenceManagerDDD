@@ -1,32 +1,27 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Core.Application.Common;
+using Core.Application.Receipts.GetReceipt;
+using Core.Infrastructure.Domain.Common;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+{
+    containerBuilder.Register(c => new SqliteConnectionFactory("Data source = test.db")).As<ISqlConnectionFactory>();
+    containerBuilder.RegisterType<SqlQueryExecutor>().As<ISqlQueryExecutor>();
+    containerBuilder.RegisterType<GetReceiptQueryHandler>().As<IQueryHandler<GetReceiptQuery, ReceiptDto>>();
+});
+
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
-
+app.MapControllers();
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

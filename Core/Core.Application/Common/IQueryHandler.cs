@@ -2,5 +2,5 @@
 
 public interface IQueryHandler<TQuery, TResult>
 {
-    Task<TResult> Query(TQuery query);
+    Task<TResult> Handle(TQuery query);
 }

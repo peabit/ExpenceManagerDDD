@@ -12,7 +12,7 @@ public sealed class GetAllCategoriesQueryHandler
     public GetAllCategoriesQueryHandler(ISqlQueryExecutor queryExecutor) 
         => _queryExecutor = queryExecutor ?? throw new ArgumentNullException(nameof(queryExecutor));
 
-    public async Task<IEnumerable<CategoryDto>> Query(GetAllCategoriesQuery query)
+    public async Task<IEnumerable<CategoryDto>> Handle(GetAllCategoriesQuery query)
     {
         var sqlQuery = """
             SELECT

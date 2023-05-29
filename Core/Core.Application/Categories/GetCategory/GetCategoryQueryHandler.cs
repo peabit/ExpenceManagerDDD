@@ -11,7 +11,7 @@ public sealed class GetCategoryQueryHandler
     public GetCategoryQueryHandler(ISqlQueryExecutor queryExecutor) 
         => _queryExecutor = queryExecutor ?? throw new ArgumentNullException(nameof(queryExecutor));
 
-    public async Task<CategoryDto> Query(GetCategoryQuery query)
+    public async Task<CategoryDto> Handle(GetCategoryQuery query)
     {
         var sqlQuery = """
             SELECT
