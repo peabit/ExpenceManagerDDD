@@ -10,6 +10,6 @@ public sealed class RenameReceiptItemCommandHandler : ICommandHandler<RenameRece
     public RenameReceiptItemCommandHandler(ReceiptItemChanger receiptItemChanger)
         => _receiptItemChanger = receiptItemChanger;
 
-    public async Task Handle(RenameReceiptItemCommand command)
+    public async Task HandleAsync(RenameReceiptItemCommand command)
         => await _receiptItemChanger.Change(command, item => item.ChangeNameTo(command.NewName));
 }

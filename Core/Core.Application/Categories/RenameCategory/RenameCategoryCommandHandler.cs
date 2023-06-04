@@ -10,6 +10,6 @@ public sealed class RenameCategoryCommandHandler : ICommandHandler<RenameCategor
     public RenameCategoryCommandHandler(CategoryChanger categoryChanger) 
         => _categoryChanger = categoryChanger ?? throw new ArgumentNullException(nameof(categoryChanger));
 
-    public async Task Handle(RenameCategoryCommand command)
+    public async Task HandleAsync(RenameCategoryCommand command)
         => await _categoryChanger.Change(command, c => c.ChangeNameTo(command.NewName));
 }

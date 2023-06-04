@@ -10,6 +10,6 @@ public sealed class UnlinkCategoryFromParentCommandHandler : ICommandHandler<Unl
     public UnlinkCategoryFromParentCommandHandler(CategoryChanger categoryChanger) 
         => _categoryChanger = categoryChanger ?? throw new ArgumentNullException(nameof(categoryChanger));
 
-    public async Task Handle(UnlinkCategoryFromParentCommand command)
+    public async Task HandleAsync(UnlinkCategoryFromParentCommand command)
         => await _categoryChanger.Change(command, c => c.UnlinkFromParentCategory());
 }

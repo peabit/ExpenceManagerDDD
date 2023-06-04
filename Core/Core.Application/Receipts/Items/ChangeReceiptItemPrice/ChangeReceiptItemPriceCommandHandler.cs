@@ -10,6 +10,6 @@ public class ChangeReceiptItemPriceCommandHandler : ICommandHandler<ChangeReceip
     public ChangeReceiptItemPriceCommandHandler(ReceiptItemChanger receiptItemChanger)
         => _receiptItemChanger = receiptItemChanger;
 
-    public async Task Handle(ChangeReceiptItemPriceCommand command)
+    public async Task HandleAsync(ChangeReceiptItemPriceCommand command)
         => await _receiptItemChanger.Change(command, item => item.ChangePriceTo(command.NewPrice));
 }

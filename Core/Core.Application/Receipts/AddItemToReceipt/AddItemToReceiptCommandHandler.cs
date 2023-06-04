@@ -17,7 +17,7 @@ public class AddItemToReceiptCommandHandler : ICommandHandler<AddItemToReceiptCo
         _categoryRepository = categoryRepository;
     }
 
-    public async Task Handle(AddItemToReceiptCommand command)
+    public async Task HandleAsync(AddItemToReceiptCommand command)
         => await _receiptChanger.Change(command, async (receipt) => await AddItemToReceipt(command, receipt));
 
     private async Task AddItemToReceipt(AddItemToReceiptCommand command, Receipt receipt)

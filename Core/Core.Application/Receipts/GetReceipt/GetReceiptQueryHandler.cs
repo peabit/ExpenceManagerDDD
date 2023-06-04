@@ -12,7 +12,7 @@ public sealed class GetReceiptQueryHandler
     public GetReceiptQueryHandler(ISqlQueryExecutor queryExecutor) 
         => _queryExecutor = queryExecutor ?? throw new ArgumentNullException(nameof(queryExecutor));
 
-    public async Task<ReceiptDto> Handle(GetReceiptQuery query)
+    public async Task<ReceiptDto> HandleAsync(GetReceiptQuery query)
     {
         var headerDraft = await ReadHeaderDarft(query);
 

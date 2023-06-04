@@ -16,7 +16,7 @@ public sealed class LinkCategoryToParentCommandHandler : ICommandHandler<LinkCat
         _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
     }
 
-    public async Task Handle(LinkCategoryToParentCommand command)
+    public async Task HandleAsync(LinkCategoryToParentCommand command)
     {
         var parentCategory = await _categoryRepository.GetAsync(new User(command.UserId), new CategoryId(command.ParentCategoryId));
         await _categoryChanger.Change(command, c => c.LinkToParentCategory(parentCategory));

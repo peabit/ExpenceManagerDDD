@@ -1,9 +1,8 @@
 ﻿using Core.Application.Receipts.Common;
 
-namespace Core.Application.Receipts.CreateReceipt;
+namespace WebAPI.Receipts;
 
-public sealed record CreateReceiptCommand(
-    string UserId,
+public sealed record AddReceiptRequest(
     string ShopName,
     DateTime DateTime,
     IEnumerable<NewReceiptItemDto> Items

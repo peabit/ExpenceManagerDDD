@@ -16,7 +16,7 @@ public class ChangeReceiptItemCategoryCommandHandler : ICommandHandler<ChangeRec
         _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
     }
 
-    public async Task Handle(ChangeReceiptItemCategoryCommand command)
+    public async Task HandleAsync(ChangeReceiptItemCategoryCommand command)
     {
         var newCategory = await _categoryRepository.GetAsync(new User(command.UserId), new CategoryId(command.NewCategoryId));
         await _receiptItemChanger.Change(command, item => item.ChangeCategoryTo(newCategory));

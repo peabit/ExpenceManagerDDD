@@ -6,6 +6,6 @@ public class FakeUserProvider : IUserProvider
 {
     public Task<User> GetAsync(string userId)
     {
-        return Task.FromResult(new User("555"));
+        return Task.FromResult(new User(userId));
     }
 }

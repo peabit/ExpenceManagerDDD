@@ -1,24 +1,50 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using Core.Application.Categories.Common;
 using Core.Application.Common;
-using Core.Application.Receipts.GetReceipt;
+using Core.Application.Receipts.Common;
+using Core.Domain.AggregatesModel.Categories;
+using Core.Domain.AggregatesModel.Receipts;
+using Core.Domain.Users;
+using Core.Infrastructure.Domain.Categories;
 using Core.Infrastructure.Domain.Common;
+using Core.Infrastructure.Domain.Receipts;
+using Core.Infrastructure.Domain.Users;
+using WebAPI.ExceptionHandling;
+using Microsoft.OpenApi.Models;
+using SimpleInjector;
+
 
 var builder = WebApplication.CreateBuilder(args);
+var ioc = new Container();
+builder.Services.AddControllers();
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Services.AddProblemDetails();
 
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+builder.Services.AddSimpleInjector(ioc, opt => opt.AddAspNetCore().AddControllerActivation());
+ioc.RegisterInstance<ISqlConnectionFactory>(new SqliteConnectionFactory("Data source = test.db"));
+ioc.Register<ISqlQueryExecutor, SqlQueryExecutor>(Lifestyle.Scoped);
+ioc.Register<CoreDbContext>(Lifestyle.Scoped);
+ioc.Register<IUserProvider, FakeUserProvider>();
+ioc.Register<IReceiptRepository, ReceiptRepository>();
+ioc.Register<ICategoryRepository, CategoryRepository>();
+ioc.Register<ReceiptChanger>();
+ioc.Register<ReceiptItemChanger>();
+ioc.Register<CategoryChanger>();
+ioc.Register(typeof(IQueryHandler<,>), typeof(IQueryHandler<,>).Assembly);
+ioc.Register(typeof(ICommandHandler<>), typeof(ICommandHandler<>).Assembly);
+ioc.RegisterDecorator(typeof(IQueryHandler<,>), typeof(ValidationQueryHandlerDecorator<,>));
+
+builder.Services.AddSwaggerGen(opt =>
 {
-    containerBuilder.Register(c => new SqliteConnectionFactory("Data source = test.db")).As<ISqlConnectionFactory>();
-    containerBuilder.RegisterType<SqlQueryExecutor>().As<ISqlQueryExecutor>();
-    containerBuilder.RegisterType<GetReceiptQueryHandler>().As<IQueryHandler<GetReceiptQuery, ReceiptDto>>();
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Expence Manager API", Version = "v1" });
+    opt.TagActionsBy(apiDescr => new[] { apiDescr?.GroupName });
+    opt.DocInclusionPredicate((name, api) => true);
 });
 
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
+
+app.UseExceptionHandler(
+    appBuilder => appBuilder.UseMiddleware<ExceptionHandlerMiddleware>()
+);
 
 app.UseSwagger();
 app.UseSwaggerUI();

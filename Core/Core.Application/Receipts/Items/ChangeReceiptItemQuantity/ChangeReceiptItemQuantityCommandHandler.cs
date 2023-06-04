@@ -10,6 +10,6 @@ public sealed class ChangeReceiptItemQuantityCommandHandler : ICommandHandler<Ch
     public ChangeReceiptItemQuantityCommandHandler(ReceiptItemChanger receiptItemChanger)
         => _receiptItemChanger = receiptItemChanger;
 
-    public Task Handle(ChangeReceiptItemQuantityCommand command)
+    public Task HandleAsync(ChangeReceiptItemQuantityCommand command)
         => _receiptItemChanger.Change(command, item => item.ChangeQuantityTo(command.NewQuantity));
 }

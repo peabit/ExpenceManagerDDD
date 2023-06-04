@@ -3,11 +3,11 @@ using Core.Domain.Users;
 
 namespace Core.Application.Receipts.Common;
 
-public abstract class ReceiptChanger
+public class ReceiptChanger
 {
     private readonly IReceiptRepository _receiptRepository;
 
-    protected ReceiptChanger(IReceiptRepository receiptRepository)
+    public ReceiptChanger(IReceiptRepository receiptRepository)
         => _receiptRepository = receiptRepository; 
 
     public async Task Change<TCommand>(TCommand command, Action<Receipt> action)

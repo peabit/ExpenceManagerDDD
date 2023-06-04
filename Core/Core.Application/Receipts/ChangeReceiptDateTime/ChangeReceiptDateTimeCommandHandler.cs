@@ -10,6 +10,6 @@ public sealed class ChangeReceiptDateTimeCommandHandler : ICommandHandler<Change
     public ChangeReceiptDateTimeCommandHandler(ReceiptChanger changer)
         => _changer = changer;
 
-    public async Task Handle(ChangeReceiptDateTimeCommand command)
+    public async Task HandleAsync(ChangeReceiptDateTimeCommand command)
         => await _changer.Change(command, receipt => receipt.ChangeDateTimeTo(command.NewDateTime));
 }

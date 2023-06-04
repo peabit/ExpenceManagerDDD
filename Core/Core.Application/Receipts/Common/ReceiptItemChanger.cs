@@ -2,11 +2,11 @@
 
 namespace Core.Application.Receipts.Common;
 
-public abstract class ReceiptItemChanger
+public class ReceiptItemChanger
 {
     private readonly ReceiptChanger _receiptChanger;
 
-    protected ReceiptItemChanger(ReceiptChanger receiptChanger)
+    public ReceiptItemChanger(ReceiptChanger receiptChanger)
         => _receiptChanger = receiptChanger;
 
     public async Task Change<TCommand>(TCommand command, Action<ReceiptItem> action)

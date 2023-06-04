@@ -10,6 +10,6 @@ public sealed class ChangeReceiptShopNameCommandHandler : ICommandHandler<Change
     public ChangeReceiptShopNameCommandHandler(ReceiptChanger receiptChanger)
         => _receiptChanger = receiptChanger;
 
-    public async Task Handle(ChangeReceiptShopNameCommand command)
+    public async Task HandleAsync(ChangeReceiptShopNameCommand command)
         => await _receiptChanger.Change(command, receipt => receipt.ChangeShopNameTo(command.NewShopName));
 }

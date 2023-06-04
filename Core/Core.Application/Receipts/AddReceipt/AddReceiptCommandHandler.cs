@@ -5,22 +5,22 @@ using Core.Domain.AggregatesModel.Receipts;
 using Core.Domain.Exceptions;
 using Core.Domain.Users;
 
-namespace Core.Application.Receipts.CreateReceipt;
+namespace Core.Application.Receipts.AddReceipt;
 
-public sealed class CreateReceiptCommandHandler : ICommandHandler<CreateReceiptCommand>
+public sealed class AddReceiptCommandHandler : ICommandHandler<AddReceiptCommand>
 {
     private readonly IUserProvider _userProvider;
     private readonly IReceiptRepository _receiptRepository;
     private readonly ICategoryRepository _categoryRepository;
 
-    public CreateReceiptCommandHandler(IUserProvider userProvider, IReceiptRepository receiptRepository, ICategoryRepository categoryRepository)
+    public AddReceiptCommandHandler(IUserProvider userProvider, IReceiptRepository receiptRepository, ICategoryRepository categoryRepository)
     {
         _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
         _receiptRepository = receiptRepository ?? throw new ArgumentNullException(nameof(receiptRepository));
         _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
     }
 
-    public async Task Handle(CreateReceiptCommand command)
+    public async Task HandleAsync(AddReceiptCommand command)
     {
         if (!command.Items.Any())
         {

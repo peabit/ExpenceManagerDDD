@@ -11,7 +11,7 @@ public sealed class FindReceiptsByPeriodQueryHandler
     public FindReceiptsByPeriodQueryHandler(ISqlQueryExecutor queryExecutor) 
         => _queryExecutor = queryExecutor ?? throw new ArgumentNullException(nameof(queryExecutor));
 
-    public async Task<IEnumerable<ReceiptHeaderDto>> Handle(FindReceiptsByPeriodQuery query)
+    public async Task<IEnumerable<ReceiptHeaderDto>> HandleAsync(FindReceiptsByPeriodQuery query)
     {
         var sqlQuery = """
             WITH 

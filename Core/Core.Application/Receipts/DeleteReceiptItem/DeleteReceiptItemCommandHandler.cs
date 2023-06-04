@@ -11,6 +11,6 @@ public sealed class DeleteReceiptItemCommandHandler : ICommandHandler<DeleteRece
     public DeleteReceiptItemCommandHandler(ReceiptChanger receiptChanger)
         => _receiptChanger = receiptChanger;
 
-    public async Task Handle(DeleteReceiptItemCommand command)
+    public async Task HandleAsync(DeleteReceiptItemCommand command)
         => await _receiptChanger.Change(command, receipt => receipt.DeleteItem(new ReceiptItemId(command.ReceipItemtId)));
 }
