@@ -30,7 +30,15 @@ public class ReceiptQueryController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSingleByIdAsync(string id)
     {
-        var query = new GetReceiptQuery(UserId, id);
+        //throw new Exception("dfgdfg");
+
+        //var d = new Dictionary<string, string[]>()
+        //{
+        //    { "F1", new string [] { "E1", "E2" } }
+        //};
+
+        //throw new ValidationException("EEEEE", d);
+        var query = new GetReceiptQuery("", id);
         var receipt = await _getReceiptHandler.HandleAsync(query);
         
         return Ok(receipt);
