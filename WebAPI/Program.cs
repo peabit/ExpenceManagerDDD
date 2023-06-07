@@ -33,9 +33,10 @@ ioc.Register<CategoryChanger>();
 ioc.Register(typeof(IQueryHandler<,>), typeof(IQueryHandler<,>).Assembly);
 ioc.Register(typeof(ICommandHandler<>), typeof(ICommandHandler<>).Assembly);
 ioc.Register(typeof(IValidator<>), typeof(ICommandHandler<>).Assembly);
-ioc.RegisterConditional(typeof(IValidator<>), typeof(EmptyFluentValidator<>), c => !c.Handled);
+ioc.RegisterConditional(typeof(IValidator<>), typeof(EmptyFluentRequestValidator<>), c => !c.Handled);
 ioc.Register(typeof(IRequestValidator<>), typeof(FluentRequestValidator<>));
 ioc.RegisterDecorator(typeof(IQueryHandler<,>), typeof(ValidationQueryHandlerDecorator<,>));
+ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(ValidationCommandHandlerDecorator<>));
 
 builder.Services.AddSwaggerGen(opt =>
 {

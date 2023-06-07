@@ -8,12 +8,9 @@ using Core.Application.Receipts.DeleteReceiptItem;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Common;
 
-namespace WebAPI.Receipts;
+namespace WebAPI.Endpoints.Receipts;
 
-[ApiExplorerSettings(GroupName = "Receipts")]
-[Route("api/receipts")]
-[ApiController]
-public class ReceiptComandController : ControllerBase
+public class ReceiptComand
 {
     private readonly ICommandHandler<AddReceiptCommand> _addHandler;
     private readonly ICommandHandler<ChangeReceiptDateTimeCommand> _changeDateTimeHandler;
@@ -24,7 +21,7 @@ public class ReceiptComandController : ControllerBase
 
     private const string UserId = "555";
 
-    public ReceiptComandController(
+    public ReceiptComand(
         ICommandHandler<AddReceiptCommand> addHandler,
         ICommandHandler<ChangeReceiptDateTimeCommand> changeDateTimeHandler,
         ICommandHandler<ChangeReceiptShopNameCommand> changeShopNameHandler,
@@ -41,12 +38,4 @@ public class ReceiptComandController : ControllerBase
         _deleteItemHandler = deleteItemHandler ?? throw new ArgumentNullException(nameof(deleteItemHandler));
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AddAsync(AddReceiptRequest request)
-    {
-        var command = new AddReceiptCommand(UserId, request.ShopName, request.DateTime, request.Items);
-        await _addHandler.HandleAsync(command);
-
-        return this.Created();
-    }
 }

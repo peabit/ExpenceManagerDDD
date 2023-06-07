@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
+    <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="5.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
@@ -15,6 +16,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.Application\Core.Application.csproj" />
     <ProjectReference Include="..\Core\Core.Infrastructure\Core.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Endpoints\Categories\" />
+    <Folder Include="Endpoints\Reports\" />
   </ItemGroup>
 
 </Project>

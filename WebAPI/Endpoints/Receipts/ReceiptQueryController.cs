@@ -6,12 +6,9 @@ using Core.Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers;
+namespace WebAPI.Endpoints.Receipts;
 
-[ApiExplorerSettings(GroupName = "Receipts")]
-[Route("api/receipts")]
-[ApiController]
-public class ReceiptQueryController : ControllerBase
+public class ReceiptQueryController 
 {
     private readonly IQueryHandler<GetReceiptQuery, ReceiptDto> _getReceiptHandler;
     private readonly IQueryHandler<FindReceiptsByPeriodQuery, IEnumerable<ReceiptHeaderDto>> _findReceiptsByPeriod;
@@ -27,8 +24,7 @@ public class ReceiptQueryController : ControllerBase
         _findReceiptsByPeriod = findReceiptsByPeriod;
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetSingleByIdAsync(string id)
+    public async Task GetSingleByIdAsync(string id)
     {
         //throw new Exception("dfgdfg");
 
@@ -40,21 +36,17 @@ public class ReceiptQueryController : ControllerBase
         //throw new ValidationException("EEEEE", d);
         var query = new GetReceiptQuery("", id);
         var receipt = await _getReceiptHandler.HandleAsync(query);
-        
-        return Ok(receipt);
+
     }
 
-    [HttpGet("{from:datetime}&{to:datetime}")]
-    public async Task<IActionResult> FindByPeriodAsync(DateTime from, DateTime to)
+    public async Task FindByPeriodAsync(DateTime from, DateTime to)
     {
-        var query = new FindReceiptsByPeriodQuery(UserId, from, to);    
+        var query = new FindReceiptsByPeriodQuery(UserId, from, to);
         var receipts = await _findReceiptsByPeriod.HandleAsync(query);
 
         if (receipts.Any())
         {
-            return Ok(receipts);
         }
 
-        return NotFound();
     }
 }

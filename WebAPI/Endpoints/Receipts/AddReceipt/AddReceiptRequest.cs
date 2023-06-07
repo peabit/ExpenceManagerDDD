@@ -1,6 +1,6 @@
 ﻿using Core.Application.Receipts.Common;
 
-namespace WebAPI.Receipts;
+namespace WebAPI.Endpoints.Receipts.AddReceipt;
 
 public sealed record AddReceiptRequest(
     string ShopName,
