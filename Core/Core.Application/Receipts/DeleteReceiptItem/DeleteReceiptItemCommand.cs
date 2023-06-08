@@ -7,4 +7,4 @@ public sealed record DeleteReceiptItemCommand(
     string ReceiptId,
     string ReceipItemtId
 )
-: ManipulateReceiptCommand(UserId, ReceiptId);
+: ChangeReceiptCommandBase(UserId, ReceiptId);

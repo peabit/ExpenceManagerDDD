@@ -7,7 +7,7 @@ public sealed class DeleteReceiptItemCommandValidator : AbstractValidator<Delete
 {
     public DeleteReceiptItemCommandValidator()
     {
-        Include(new ManipulateReceiptCommandValidator());
+        //Include(new ManipulateReceiptCommandValidator());
         RuleFor(cmd => cmd.ReceipItemtId).NotEmpty();
     }
 }

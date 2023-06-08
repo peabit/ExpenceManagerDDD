@@ -17,13 +17,13 @@ public sealed class GetCategoryQueryHandler
             SELECT
                 Categories.Id,
                 Categories.Name,
-                Categories.ParentId,
+                Categories.ParentCategoryId,
                 ParentCategories.Name AS ParentName
         
             FROM Categories
         
             LEFT JOIN Categories AS ParentCategories ON 
-                Categories.ParentId = ParentCategories.Id AND 
+                Categories.ParentCategoryId = ParentCategories.Id AND 
                 Categories.UserId = ParentCategories.UserId
         
             WHERE 

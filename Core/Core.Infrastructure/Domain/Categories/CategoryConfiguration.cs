@@ -17,7 +17,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasConversion(id => new CategoryId(id));
 
         builder
-            .Property(c => c.ParentId)
+            .Property(c => c.ParentCategoryId)
             .HasConversion(id => new CategoryId(id));
 
         builder

@@ -1,5 +1,11 @@
-﻿namespace Core.Application.Receipts.ChangeReceipt;
+﻿using Core.Application.Receipts.Common;
 
-//public sealed record ChangeReceiptCommand(
-//    string UserId, 
-//    string receiptId, )
+namespace Core.Application.Receipts.ChangeReceipt;
+
+public sealed record ChangeReceiptCommand(
+    string UserId,
+    string ReceiptId, 
+    string? ShopName,
+    DateTime? DateTime
+)
+: Common.ChangeReceiptCommandBase(UserId, ReceiptId);

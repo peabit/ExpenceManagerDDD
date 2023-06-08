@@ -1,4 +1,4 @@
-﻿using Core.Application.Categories.Common;
+﻿using Core.Domain.Exceptions;
 using Core.Application.Common;
 
 namespace Core.Application.Categories.Common;
@@ -23,13 +23,20 @@ public sealed class GetAllCategoriesQueryHandler
 
             FROM Categories
 
-            JOIN Categories AS ParentCategories ON 
-                Categories.ParentId = ParentCategories.Id AND 
+            LEFT JOIN Categories AS ParentCategories ON 
+                Categories.ParentCategoryId = ParentCategories.Id AND 
                 Categories.UserId = ParentCategories.UserId
 
             WHERE Categories.UserId = @UserId
         """;
 
-        return await _queryExecutor.Query<CategoryDto>(query: sqlQuery, parameters: query);
+        var categories = await _queryExecutor.Query<CategoryDto>(query: sqlQuery, parameters: query);
+
+        if (!categories.Any())
+        {
+            throw new NotFoundException($"User with id {query.UserId} does not have categories");
+        }
+
+        return categories;
     }
 }

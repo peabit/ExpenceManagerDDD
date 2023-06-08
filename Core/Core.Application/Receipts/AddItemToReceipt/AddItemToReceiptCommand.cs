@@ -7,4 +7,4 @@ public sealed record AddItemToReceiptCommand(
     string ReceiptId, 
     NewReceiptItemDto NewItem
 ) 
-: ManipulateReceiptCommand(UserId, ReceiptId);
+: ChangeReceiptCommandBase(UserId, ReceiptId);

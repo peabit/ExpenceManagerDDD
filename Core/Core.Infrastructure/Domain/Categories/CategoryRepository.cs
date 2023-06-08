@@ -14,13 +14,10 @@ public class CategoryRepository : ICategoryRepository
         => _dbContext = dbContext;
     
     public async Task AddAsync(Category category)
-    {
-        await _dbContext.Categories.AddAsync(category);
-        await _dbContext.SaveChangesAsync();
-    }
+        => await _dbContext.Categories.AddAsync(category);
 
-    public async Task DeleteAsync(CategoryId categoryId)
-        => await _dbContext.Categories.Where(c => c.Id == categoryId).ExecuteDeleteAsync();
+    public void Delete(Category category)
+        => _dbContext.Categories.Remove(category); 
 
     public async Task<IEnumerable<Category>> GetAsync(User user)
     {
@@ -44,11 +41,5 @@ public class CategoryRepository : ICategoryRepository
         }
 
         return category;
-    }
-
-    public async Task UpdateAsync(Category category)
-    {
-        _dbContext.Categories.Update(category);
-        await _dbContext.SaveChangesAsync();
     }
 }

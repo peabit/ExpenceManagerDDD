@@ -7,6 +7,5 @@ public interface IReceiptRepository : IRepository<Receipt>
 {
     Task<Receipt> GetAsync(User user, ReceiptId id);
     Task AddAsync(Receipt receipt);
-    Task UpdateAsync(Receipt receipt);
-    Task DeleteAsync(User user, ReceiptId id);
+    void Delete(Receipt receipt);
 }

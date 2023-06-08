@@ -14,13 +14,10 @@ public class ReceiptRepository : IReceiptRepository
         => _dbContext = dbContext;
 
     public async Task AddAsync(Receipt receipt)
-    {
-        await _dbContext.Receipts.AddAsync(receipt);
-        await _dbContext.SaveChangesAsync();
-    }
+        => await _dbContext.Receipts.AddAsync(receipt);
 
-    public async Task DeleteAsync(User user, ReceiptId id)
-        => await _dbContext.Receipts.Where(r => r.User == user & r.Id == id).ExecuteDeleteAsync();
+    public void Delete(Receipt receipt)
+        => _dbContext.Receipts.Remove(receipt);
 
     public async Task<Receipt> GetAsync(User user, ReceiptId id)
     {
@@ -32,11 +29,5 @@ public class ReceiptRepository : IReceiptRepository
         }
 
         return receipt;
-    }
-
-    public async Task UpdateAsync(Receipt receipt)
-    {
-        _dbContext.Receipts.Update(receipt);
-        await _dbContext.SaveChangesAsync();
     }
 }

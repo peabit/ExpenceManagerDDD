@@ -7,7 +7,7 @@ public sealed class AddItemToReceiptCommandValidator : AbstractValidator<AddItem
 {
     public AddItemToReceiptCommandValidator()
     {
-        Include(new ManipulateReceiptCommandValidator());
+        //Include(new ManipulateReceiptCommandValidator());
         RuleFor(cmd => cmd.NewItem).SetValidator(new NewReceiptItemDtoValidator());
     }
 }

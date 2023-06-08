@@ -1,14 +1,14 @@
-using Core.Application.Categories.Common;
 using Core.Application.Common;
-using Core.Application.Receipts.Common;
 using Core.Domain.AggregatesModel.Categories;
 using Core.Domain.AggregatesModel.Receipts;
 using Core.Domain.Users;
+using Core.Infrastructure.Application;
 using Core.Infrastructure.Domain.Categories;
 using Core.Infrastructure.Domain.Common;
 using Core.Infrastructure.Domain.Receipts;
 using Core.Infrastructure.Domain.Users;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SimpleInjector;
 using WebAPI;
@@ -24,18 +24,18 @@ builder.Services.AddSimpleInjector(ioc, opt => opt.AddAspNetCore().AddController
 ioc.RegisterInstance<ISqlConnectionFactory>(new SqliteConnectionFactory("Data source = test.db"));
 ioc.Register<ISqlQueryExecutor, SqlQueryExecutor>(Lifestyle.Scoped);
 ioc.Register<CoreDbContext>(Lifestyle.Scoped);
+ioc.Register<DbContext, CoreDbContext>(Lifestyle.Scoped);
 ioc.Register<IUserProvider, FakeUserProvider>();
 ioc.Register<IReceiptRepository, ReceiptRepository>();
 ioc.Register<ICategoryRepository, CategoryRepository>();
-ioc.Register<ReceiptChanger>();
-ioc.Register<ReceiptItemChanger>();
-ioc.Register<CategoryChanger>();
 ioc.Register(typeof(IQueryHandler<,>), typeof(IQueryHandler<,>).Assembly);
 ioc.Register(typeof(ICommandHandler<>), typeof(ICommandHandler<>).Assembly);
 ioc.Register(typeof(IValidator<>), typeof(ICommandHandler<>).Assembly);
 ioc.RegisterConditional(typeof(IValidator<>), typeof(EmptyFluentRequestValidator<>), c => !c.Handled);
 ioc.Register(typeof(IRequestValidator<>), typeof(FluentRequestValidator<>));
+ioc.Register<IUnitOfWork, EntityFrameworkUnitOfWork>(Lifestyle.Scoped);
 ioc.RegisterDecorator(typeof(IQueryHandler<,>), typeof(ValidationQueryHandlerDecorator<,>));
+ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
 ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(ValidationCommandHandlerDecorator<>));
 
 builder.Services.AddSwaggerGen(opt =>

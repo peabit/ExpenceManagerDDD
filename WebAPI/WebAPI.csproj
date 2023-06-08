@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Endpoints\Categories\" />
     <Folder Include="Endpoints\Reports\" />
   </ItemGroup>
 

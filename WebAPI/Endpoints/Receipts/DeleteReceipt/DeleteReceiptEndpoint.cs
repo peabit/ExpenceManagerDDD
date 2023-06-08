@@ -17,10 +17,7 @@ public sealed class DeleteReceiptEndpoint : Controller
     [HttpDelete("{userId}/receipts/{receiptId}")]
     public async Task<IActionResult> HandleAsync(string userId, string receiptId)
     {
-        await _handler.HandleAsync(
-            new DeleteReceiptCommand(userId, receiptId)
-        );
-
+        await _handler.HandleAsync(new DeleteReceiptCommand(userId, receiptId));
         return NoContent();
     }
 }

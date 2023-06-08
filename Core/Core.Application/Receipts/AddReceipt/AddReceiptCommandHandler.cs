@@ -2,7 +2,6 @@
 using Core.Application.Receipts.Common;
 using Core.Domain.AggregatesModel.Categories;
 using Core.Domain.AggregatesModel.Receipts;
-using Core.Domain.Exceptions;
 using Core.Domain.Users;
 
 namespace Core.Application.Receipts.AddReceipt;
@@ -22,11 +21,6 @@ public sealed class AddReceiptCommandHandler : ICommandHandler<AddReceiptCommand
 
     public async Task HandleAsync(AddReceiptCommand command)
     {
-        if (!command.Items.Any())
-        {
-            throw new DomainException("Receipt have to have positions");
-        }
-
         var user = await _userProvider.GetAsync(command.UserId);
         var items = await CreateItems(user, command.Items);
         var receipt = user.CreateReceipt(command.ShopName, command.DateTime, items);

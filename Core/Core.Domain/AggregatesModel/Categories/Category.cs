@@ -11,12 +11,12 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
     {
         User = user ?? throw new ArgumentNullException(nameof(user));
         Name = name ?? throw new ArgumentNullException(nameof(name));
-        ParentId = parentCategory?.Id; 
+        ParentCategoryId = parentCategory?.Id; 
     }
 
     private Category() { }
 
-    private CategoryId? _parentId;
+    private CategoryId? _parentCategoryId;
     private string _name;
 
     public User User { get; private init; }
@@ -36,9 +36,9 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
         }
     }
 
-    public CategoryId? ParentId
+    public CategoryId? ParentCategoryId
     {
-        get => _parentId;
+        get => _parentCategoryId;
         
         private set
         {
@@ -47,7 +47,7 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
                 throw new DomainException("Сategory cannot be a parent to itself");
             }
 
-            _parentId = value;
+            _parentCategoryId = value;
         }
     }
 
@@ -58,11 +58,11 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
         => Name = newName;
 
     public bool HasParentCategory()
-        => ParentId is not null;
+        => ParentCategoryId is not null;
 
     public void LinkToParentCategory(Category parentCategory)
-        => ParentId = parentCategory.Id ?? throw new ArgumentNullException(nameof(parentCategory));
+        => ParentCategoryId = parentCategory.Id ?? throw new ArgumentNullException(nameof(parentCategory));
 
     public void UnlinkFromParentCategory()
-        => _parentId = HasParentCategory() ? null : throw new DomainException("Category has no parent");
+        => _parentCategoryId = HasParentCategory() ? null : throw new DomainException("Category has no parent");
 }

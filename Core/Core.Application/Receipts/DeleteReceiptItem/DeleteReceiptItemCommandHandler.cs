@@ -1,16 +1,25 @@
 ﻿using Core.Application.Common;
-using Core.Application.Receipts.Common;
 using Core.Domain.AggregatesModel.Receipts;
+using Core.Domain.Users;
 
 namespace Core.Application.Receipts.DeleteReceiptItem;
 
 public sealed class DeleteReceiptItemCommandHandler : ICommandHandler<DeleteReceiptItemCommand>
 {
-    private readonly ReceiptChanger _receiptChanger;
+    private readonly IReceiptRepository _receiptRepository;
+    private readonly IUserProvider _userProvider;
 
-    public DeleteReceiptItemCommandHandler(ReceiptChanger receiptChanger)
-        => _receiptChanger = receiptChanger;
+    public DeleteReceiptItemCommandHandler(IReceiptRepository receiptRepository, IUserProvider userProvider)
+    {
+        _receiptRepository = receiptRepository ?? throw new ArgumentNullException(nameof(receiptRepository));
+        _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
+    }
 
     public async Task HandleAsync(DeleteReceiptItemCommand command)
-        => await _receiptChanger.Change(command, receipt => receipt.DeleteItem(new ReceiptItemId(command.ReceipItemtId)));
+    {
+        var user = await _userProvider.GetAsync(command.UserId);
+        var receipt = await _receiptRepository.GetAsync(user, new ReceiptId(command.ReceiptId));
+        
+        receipt.DeleteItem(new ReceiptItemId(command.ReceipItemtId));
+    }
 }
