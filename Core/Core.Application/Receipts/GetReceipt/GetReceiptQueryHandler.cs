@@ -24,6 +24,7 @@ public sealed class GetReceiptQueryHandler
         }
 
         var items = await ReadItems(query);
+
         var header = headerDraft with { Total = items.Sum(i => i.Coast) };
         
         return new ReceiptDto(header, items);

@@ -10,13 +10,13 @@ public sealed class AddReceiptCommandHandler : ICommandHandler<AddReceiptCommand
 {
     private readonly IUserProvider _userProvider;
     private readonly IReceiptRepository _receiptRepository;
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryProvider _categoryProvider;
 
-    public AddReceiptCommandHandler(IUserProvider userProvider, IReceiptRepository receiptRepository, ICategoryRepository categoryRepository)
+    public AddReceiptCommandHandler(IUserProvider userProvider, IReceiptRepository receiptRepository, ICategoryProvider categoryProvider)
     {
         _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
         _receiptRepository = receiptRepository ?? throw new ArgumentNullException(nameof(receiptRepository));
-        _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+        _categoryProvider = categoryProvider ?? throw new ArgumentNullException(nameof(categoryProvider));
     }
 
     public async Task HandleAsync(AddReceiptCommand command)
@@ -33,7 +33,7 @@ public sealed class AddReceiptCommandHandler : ICommandHandler<AddReceiptCommand
 
         foreach (var itemDto in itemDtos)
         {
-            var category = await _categoryRepository.GetAsync(user, new CategoryId(itemDto.CategoryId));
+            var category = await _categoryProvider.GetAsync(user, new CategoryId(itemDto.CategoryId));
             var item = category.CreateReceiptItem(itemDto.Name, itemDto.Price, itemDto.Quantity);
             items.Add(item);
         }

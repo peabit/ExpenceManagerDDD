@@ -18,7 +18,9 @@ public sealed class DeleteReceiptCommandHandler : ICommandHandler<DeleteReceiptC
     public async Task HandleAsync(DeleteReceiptCommand command)
     {
         var user = await _userProvider.GetAsync(command.UserId);
+
         var receipt = await _receiptRepository.GetAsync(user, new ReceiptId(command.ReceiptId));
+
         _receiptRepository.Delete(receipt);
     }
 }

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
     <PackageReference Include="Mapster" Version="7.3.0" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore" Version="5.4.0" />
     <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="5.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>

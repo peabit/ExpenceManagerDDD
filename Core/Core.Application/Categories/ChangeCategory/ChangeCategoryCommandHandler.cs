@@ -6,12 +6,12 @@ namespace Core.Application.Categories.ChangeCategory;
 
 public sealed class ChangeCategoryCommandHandler : ICommandHandler<ChangeCategoryCommand>
 {
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryProvider _categoryProvider;
     private readonly IUserProvider _userProvider;
 
-    public ChangeCategoryCommandHandler(ICategoryRepository categoryRepository, IUserProvider userProvider)
+    public ChangeCategoryCommandHandler(ICategoryProvider categoryRepository, IUserProvider userProvider)
     {
-        _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+        _categoryProvider = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
     }
 
@@ -39,13 +39,16 @@ public sealed class ChangeCategoryCommandHandler : ICommandHandler<ChangeCategor
         }
 
         var parentCategory = await GetCategoryAsync(userId,parentCategoryId);
+
         category.LinkToParentCategory(parentCategory);
     }
 
     private async Task<Category> GetCategoryAsync(string userId, string categoryId)
     {
         var user = await _userProvider.GetAsync(userId);
-        var category = await _categoryRepository.GetAsync(user, new CategoryId(categoryId));
+
+        var category = await _categoryProvider.GetAsync(user, new CategoryId(categoryId));
+
         return category;
     }
 }

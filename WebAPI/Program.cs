@@ -11,32 +11,37 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SimpleInjector;
+using SimpleInjector.Lifestyles;
 using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 var ioc = new Container();
 ioc.Options.EnableAutoVerification = false;
+//ioc.Options.DefaultLifestyle = new AsyncScopedLifestyle();
 
 builder.Services.AddHellangProblemDetails();
 builder.Services.AddControllers();
 builder.Services.AddSimpleInjector(ioc, opt => opt.AddAspNetCore().AddControllerActivation());
 
 ioc.RegisterInstance<ISqlConnectionFactory>(new SqliteConnectionFactory("Data source = test.db"));
-ioc.Register<ISqlQueryExecutor, SqlQueryExecutor>(Lifestyle.Scoped);
-ioc.Register<CoreDbContext>(Lifestyle.Scoped);
-ioc.Register<DbContext, CoreDbContext>(Lifestyle.Scoped);
+ioc.Register<ISqlQueryExecutor, SqlQueryExecutor>();
+ioc.Register<CoreDbContext>();
+ioc.Register<DbContext, CoreDbContext>();
 ioc.Register<IUserProvider, FakeUserProvider>();
 ioc.Register<IReceiptRepository, ReceiptRepository>();
 ioc.Register<ICategoryRepository, CategoryRepository>();
+ioc.Register<ICategoryProvider, CategoryRepository>();
 ioc.Register(typeof(IQueryHandler<,>), typeof(IQueryHandler<,>).Assembly);
 ioc.Register(typeof(ICommandHandler<>), typeof(ICommandHandler<>).Assembly);
 ioc.Register(typeof(IValidator<>), typeof(ICommandHandler<>).Assembly);
 ioc.RegisterConditional(typeof(IValidator<>), typeof(EmptyFluentRequestValidator<>), c => !c.Handled);
 ioc.Register(typeof(IRequestValidator<>), typeof(FluentRequestValidator<>));
-ioc.Register<IUnitOfWork, EntityFrameworkUnitOfWork>(Lifestyle.Scoped);
+ioc.Register<IUnitOfWork, EntityFrameworkUnitOfWork>();
 ioc.RegisterDecorator(typeof(IQueryHandler<,>), typeof(ValidationQueryHandlerDecorator<,>));
 ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
 ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(ValidationCommandHandlerDecorator<>));
+
+//var q = ioc.GetInstance<IReceiptRepository>();
 
 builder.Services.AddSwaggerGen(opt =>
 {

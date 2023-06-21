@@ -8,13 +8,13 @@ namespace Core.Application.Receipts.ChangeReceiptItem;
 public sealed class ChangeReceiptItemCommandHandler : ICommandHandler<ChangeReceiptItemCommand>
 {
     private readonly IReceiptRepository _receiptRepository;
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryProvider _categoryProvider;
     private readonly IUserProvider _userProvider;
 
-    public ChangeReceiptItemCommandHandler(IReceiptRepository receiptRepository, ICategoryRepository categoryRepository, IUserProvider userProvider)
+    public ChangeReceiptItemCommandHandler(IReceiptRepository receiptRepository, ICategoryProvider categoryRepository, IUserProvider userProvider)
     {
         _receiptRepository = receiptRepository ?? throw new ArgumentNullException(nameof(receiptRepository));
-        _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+        _categoryProvider = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
     }
 
@@ -42,7 +42,7 @@ public sealed class ChangeReceiptItemCommandHandler : ICommandHandler<ChangeRece
 
         if (command.CategoryId is not null)
         {
-            var category = await _categoryRepository.GetAsync(user, new CategoryId(command.CategoryId));
+            var category = await _categoryProvider.GetAsync(user, new CategoryId(command.CategoryId));
             item.ChangeCategoryTo(category);
         }
     }

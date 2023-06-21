@@ -27,6 +27,7 @@ public sealed class AddCategoryCommandHandler : ICommandHandler<AddCategoryComma
         }
         
         var category = user.CreateCategory(command.Name, parentCategory);
+
         await _categoryRepository.AddAsync(category);
     }
 }

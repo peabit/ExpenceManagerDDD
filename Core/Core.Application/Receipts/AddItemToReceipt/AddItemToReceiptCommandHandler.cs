@@ -9,13 +9,13 @@ namespace Core.Application.Receipts.AddItemToReceipt;
 public class AddItemToReceiptCommandHandler : ICommandHandler<AddItemToReceiptCommand>
 {
     private readonly IReceiptRepository _receiptRepository;
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryProvider _categoryProvider;
     private readonly IUserProvider _userProvider;
 
-    public AddItemToReceiptCommandHandler(IReceiptRepository receiptRepository, ICategoryRepository categoryRepository, IUserProvider userProvider)
+    public AddItemToReceiptCommandHandler(IReceiptRepository receiptRepository, ICategoryProvider categoryProvider, IUserProvider userProvider)
     {
         _receiptRepository = receiptRepository ?? throw new ArgumentNullException(nameof(receiptRepository));
-        _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+        _categoryProvider = categoryProvider ?? throw new ArgumentNullException(nameof(categoryProvider));
         _userProvider = userProvider ?? throw new ArgumentNullException( nameof(userProvider));
     }
 
@@ -32,7 +32,7 @@ public class AddItemToReceiptCommandHandler : ICommandHandler<AddItemToReceiptCo
 
     private async Task<ReceiptItem> CreateItem(AddItemToReceiptCommand command, User user)
     {
-        var category = await _categoryRepository.GetAsync(user, new CategoryId(command.NewItem.CategoryId));        
+        var category = await _categoryProvider.GetAsync(user, new CategoryId(command.NewItem.CategoryId));        
         
         var item = category.CreateReceiptItem(command.NewItem.Name, command.NewItem.Price, command.NewItem.Quantity);
         
