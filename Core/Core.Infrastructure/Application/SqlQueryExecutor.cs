@@ -32,6 +32,9 @@ public sealed class SqlQueryExecutor : ISqlQueryExecutor, IDisposable
     public async Task<TResult> QueryFirstOrDefault<TResult>(string query, object parameters)
         => await Connection.QueryFirstOrDefaultAsync<TResult>(query, parameters);
 
+    public async Task<TResult> ExecuteScalarAsync<TResult>(string query, object parameters)
+        => await Connection.ExecuteScalarAsync<TResult>(query, parameters);
+
     public void Dispose()
         => _connection?.Dispose();
 }

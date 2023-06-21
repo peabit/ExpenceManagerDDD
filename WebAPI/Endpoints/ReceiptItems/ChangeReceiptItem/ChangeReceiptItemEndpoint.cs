@@ -1,6 +1,7 @@
 ﻿using Core.Application.Common;
 using Core.Application.Receipts.ChangeReceiptItem;
 using Microsoft.AspNetCore.Mvc;
+using SimpleInjector;
 
 namespace WebAPI.Endpoints.ReceiptItems.ChangeReceiptItem;
 
@@ -11,7 +12,7 @@ public sealed class ChangeReceiptItemEndpoint : Controller
 {
     private readonly ICommandHandler<ChangeReceiptItemCommand> _handler;
 
-    public ChangeReceiptItemEndpoint(ICommandHandler<ChangeReceiptItemCommand> handler)
+    public ChangeReceiptItemEndpoint(ICommandHandler<ChangeReceiptItemCommand> handler, Container container) 
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
     [HttpPut("userId/receipts/{receiptId}/items/{itemId}")]

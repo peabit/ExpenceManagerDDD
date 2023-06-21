@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Core\Core.Infrastructure\Core.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Endpoints\Reports\" />
-  </ItemGroup>
-
 </Project>

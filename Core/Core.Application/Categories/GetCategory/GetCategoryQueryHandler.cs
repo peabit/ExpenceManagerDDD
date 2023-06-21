@@ -18,7 +18,7 @@ public sealed class GetCategoryQueryHandler
                 Categories.Id,
                 Categories.Name,
                 Categories.ParentCategoryId,
-                ParentCategories.Name AS ParentName
+                ParentCategories.Name AS ParentCategoryName
         
             FROM Categories
         

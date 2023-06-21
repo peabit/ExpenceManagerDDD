@@ -3,5 +3,6 @@
 public sealed record TotalsByCategoriesDto(
     DateTime From,
     DateTime To,
-    IEnumerable<TotalByCategoryDto> Totals
+    IEnumerable<TotalByCategoryDto> Totals,
+    decimal Total
 );

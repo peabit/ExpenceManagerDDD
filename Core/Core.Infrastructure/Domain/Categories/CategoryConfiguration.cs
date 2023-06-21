@@ -10,7 +10,17 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.HasKey(c => c.Id);
+        builder
+            .HasKey(c => c.Id);
+
+        builder
+            .ToTable("Categories");
+
+        //builder
+        //    .HasOne<Category>()
+        //    .WithMany()
+        //    .HasForeignKey(c => c.ParentCategoryId)
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .Property(c => c.Id)
