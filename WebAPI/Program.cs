@@ -11,13 +11,12 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SimpleInjector;
-using SimpleInjector.Lifestyles;
 using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 var ioc = new Container();
 ioc.Options.EnableAutoVerification = false;
-//ioc.Options.DefaultLifestyle = new AsyncScopedLifestyle();
+ioc.Options.DefaultLifestyle = Lifestyle.Scoped;
 
 builder.Services.AddHellangProblemDetails();
 builder.Services.AddControllers();
@@ -40,8 +39,6 @@ ioc.Register<IUnitOfWork, EntityFrameworkUnitOfWork>();
 ioc.RegisterDecorator(typeof(IQueryHandler<,>), typeof(ValidationQueryHandlerDecorator<,>));
 ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
 ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(ValidationCommandHandlerDecorator<>));
-
-//var q = ioc.GetInstance<IReceiptRepository>();
 
 builder.Services.AddSwaggerGen(opt =>
 {
