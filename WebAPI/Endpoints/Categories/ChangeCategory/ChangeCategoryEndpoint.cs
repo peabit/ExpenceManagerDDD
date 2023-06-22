@@ -6,7 +6,7 @@ using WebAPI.Endpoints.Categories.ChangeCategory;
 namespace WebAPI.Endpoints.Categories.GetAllCategories;
 
 [ApiExplorerSettings(GroupName = "Categories")]
-[Route("api")]
+[Route("api/{userId}/categories/{categoryId}")]
 [ApiController]
 public class ChangeCategoryEndpoint : Controller
 {
@@ -15,7 +15,7 @@ public class ChangeCategoryEndpoint : Controller
     public ChangeCategoryEndpoint(ICommandHandler<ChangeCategoryCommand> handler)
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpPut("{userId}/categories/{categoryId}")]
+    [HttpPut]
     public async Task<IActionResult> HandleAsync(string userId, string categoryId, ChangeCategoryRequest request)
     {
         await _handler.HandleAsync(

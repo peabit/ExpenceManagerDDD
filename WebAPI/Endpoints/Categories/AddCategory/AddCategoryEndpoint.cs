@@ -6,7 +6,7 @@ using WebAPI.Endpoints.Categories.AddCategory;
 namespace WebAPI.Endpoints.Categories.GetAllCategories;
 
 [ApiExplorerSettings(GroupName = "Categories")]
-[Route("api")]
+[Route("api/{userId}/categories")]
 [ApiController]
 public class AddCategoryEndpoint : Controller
 {
@@ -15,7 +15,7 @@ public class AddCategoryEndpoint : Controller
     public AddCategoryEndpoint(ICommandHandler<AddCategoryCommand> handler)
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpPost("{userId}/categories")]
+    [HttpPost]
     public async Task<IActionResult> HandleAsync(string userId, AddCategoryRequest request)
     {
         await _handler.HandleAsync(

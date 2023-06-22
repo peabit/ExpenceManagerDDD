@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Endpoints.Categories.GetAllCategories;
 
 [ApiExplorerSettings(GroupName = "Categories")]
-[Route("api")]
+[Route("api/{userId}/categories/{categoryId}")]
 [ApiController]
 public class GetCategoryEndpoint : Controller
 {
@@ -15,7 +15,7 @@ public class GetCategoryEndpoint : Controller
     public GetCategoryEndpoint(IQueryHandler<GetCategoryQuery, CategoryDto> handler)
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpGet("{userId}/categories/{categoryId}")]
+    [HttpGet]
     public async Task<IActionResult> HandleAsync(string userId, string categoryId)
     {
         var category = await _handler.HandleAsync(new GetCategoryQuery(userId, categoryId));

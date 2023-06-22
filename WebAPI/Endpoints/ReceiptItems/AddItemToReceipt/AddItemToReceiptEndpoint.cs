@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Endpoints.ReceiptItems.AddItemToReceipt;
 
-[ApiExplorerSettings(GroupName = "ReceiptItems")]
-[Route("api")]
+[ApiExplorerSettings(GroupName = "Receipt items")]
+[Route("api/{userId}/receipts/{receiptId}/items")]
 [ApiController]
 public sealed class AddItemToReceiptEndpoint : Controller
 {
@@ -15,7 +15,7 @@ public sealed class AddItemToReceiptEndpoint : Controller
     public AddItemToReceiptEndpoint(ICommandHandler<AddItemToReceiptCommand> handler)
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpPost("userId/receipts/{receiptId}/items")]
+    [HttpPost]
     public async Task<IActionResult> HandleAsync(string userId, string receiptId, NewReceiptItemDto newReceiptItemDto)
     {
         await _handler.HandleAsync(

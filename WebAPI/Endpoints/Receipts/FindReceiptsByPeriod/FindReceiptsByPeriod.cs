@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Endpoints.Receipts.FindReceiptsByPeriod;
 
 [ApiExplorerSettings(GroupName = "Receipts")]
-[Route("api")]
+[Route("api/{userId}/receipts/{from:datetime}&{to:datetime}")]
 [ApiController]
 public sealed class FindReceiptsByPeriod : Controller
 {
@@ -15,7 +15,7 @@ public sealed class FindReceiptsByPeriod : Controller
     public FindReceiptsByPeriod(IQueryHandler<FindReceiptsByPeriodQuery, IEnumerable<ReceiptHeaderDto>> handler) 
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpGet("{userId}/receipts/{from:datetime}&{to:datetime}")]
+    [HttpGet]
     public async Task<IActionResult> HandleAsync(string userId, DateTime from, DateTime to)
     {
         var receipts = await _handler.HandleAsync(

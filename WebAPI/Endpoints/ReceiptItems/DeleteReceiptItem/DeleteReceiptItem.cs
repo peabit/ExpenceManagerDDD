@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Endpoints.ReceiptItems.DeleteReceiptItem;
 
-[ApiExplorerSettings(GroupName = "ReceiptItems")]
-[Route("api")]
+[ApiExplorerSettings(GroupName = "Receipt items")]
+[Route("api/{userId}/receipts/{receiptId}/items/{itemId}")]
 [ApiController]
 public sealed class DeleteReceiptItem : Controller
 {
@@ -14,7 +14,7 @@ public sealed class DeleteReceiptItem : Controller
     public DeleteReceiptItem(ICommandHandler<DeleteReceiptItemCommand> handler)
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpDelete("{userId}/receipts/{receiptId}/items/{itemId}")]
+    [HttpDelete]
     public async Task<IActionResult> HandleAsync(string userId, string receiptId, string itemId)
     {
         await _handler.HandleAsync(

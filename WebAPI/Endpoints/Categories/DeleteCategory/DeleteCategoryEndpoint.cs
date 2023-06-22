@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Endpoints.Categories.DeleteCategory;
 
 [ApiExplorerSettings(GroupName = "Categories")]
-[Route("api")]
+[Route("api/{userId}/categories/{categoryId}")]
 [ApiController]
 public class DeleteCategoryEndpoint : Controller
 {
@@ -14,7 +14,7 @@ public class DeleteCategoryEndpoint : Controller
     public DeleteCategoryEndpoint(ICommandHandler<DeleteCategoryCommand> handler)
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpDelete("{userId}/categories/{categoryId}")]
+    [HttpDelete]
     public async Task<IActionResult> HandleAsync(string userId, string categoryId)
     {
         await _handler.HandleAsync(new DeleteCategoryCommand(userId, categoryId));

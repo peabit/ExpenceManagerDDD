@@ -5,8 +5,8 @@ using SimpleInjector;
 
 namespace WebAPI.Endpoints.ReceiptItems.ChangeReceiptItem;
 
-[ApiExplorerSettings(GroupName = "ReceiptItems")]
-[Route("api")]
+[ApiExplorerSettings(GroupName = "Receipt items")]
+[Route("api/{userId}/receipts/{receiptId}/items/{itemId}")]
 [ApiController]
 public sealed class ChangeReceiptItemEndpoint : Controller
 {
@@ -15,7 +15,7 @@ public sealed class ChangeReceiptItemEndpoint : Controller
     public ChangeReceiptItemEndpoint(ICommandHandler<ChangeReceiptItemCommand> handler, Container container) 
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpPut("userId/receipts/{receiptId}/items/{itemId}")]
+    [HttpPut]
     public async Task<IActionResult> HandleAsync(string userId, string receiptId, string itemId, ChangeReceiptItemRequest request)
     {
         await _handler.HandleAsync(

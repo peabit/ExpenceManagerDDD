@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Endpoints.Receipts.ChangeReceipt;
 
 [ApiExplorerSettings(GroupName = "Receipts")]
-[Route("api")]
+[Route("api/{userId}/receipts/{receiptId}")]
 [ApiController]
 public sealed class ChangeReceiptEndpoint : Controller
 {
@@ -14,7 +14,7 @@ public sealed class ChangeReceiptEndpoint : Controller
     public ChangeReceiptEndpoint(ICommandHandler<ChangeReceiptCommand> handler) 
         => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-    [HttpPut("{userId}/receipts/{receiptId}")]
+    [HttpPut]
     public async Task<IActionResult> HandleAsync(string userId, string receiptId, ChangeReceiptRequest request)
     {
         await _handler.HandleAsync(
