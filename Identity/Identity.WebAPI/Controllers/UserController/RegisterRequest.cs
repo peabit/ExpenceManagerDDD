@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.WebAPI.Controllers;
+namespace Identity.WebAPI.Controllers.UserController;
 
 public sealed record RegisterRequest(
     [Required]
