@@ -7,12 +7,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Identity.WebAPI.Controllers.UserController;
 
-// Register +
-// Get +
-// Confirm Email +
-// Reset Password 
-// Confirm reset password
-
 [Route("api/users/")]
 [ApiController]
 public class UserController : Controller
@@ -31,7 +25,10 @@ public class UserController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
-        var user = new User() { UserName = request.UserName };
+        var user = new User() { 
+            UserName = request.UserName,
+            Email = request.Email
+        };
 
         var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -46,18 +43,18 @@ public class UserController : Controller
         return Ok();
     }
 
-    [HttpPut("{userId}/email/confirm/{token}")]
-    public async Task<IActionResult> ConfirmEmail(string userId, string token)
+    [HttpPost("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest request)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
         {
-            return NotFoundProblem($"User with id {userId} not found");
+            return NotFoundProblem($"User with email {request.Email} not found");
         }
 
         // Replace nessesary for correct work in Swagger
-        var result = await _userManager.ConfirmEmailAsync(user, token.Replace("%2F", "/"));
+        var result = await _userManager.ConfirmEmailAsync(user, request.Token.Replace("%2F", "/"));
 
         if (!result.Succeeded)
         {
@@ -67,17 +64,54 @@ public class UserController : Controller
         return Ok();
     }
 
+    [HttpPost("try-reset-password")]
+    public async Task<IActionResult> TryResetPassword(TryResetPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user is null)
+        {
+            return NotFoundProblem($"User with email {request.Email} not found");
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        await _tokenSender.SendForChangePasswordConfirmation(user, token);
+
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user is null)
+        {
+            return NotFoundProblem($"User with email {request.Email} not found");
+        }
+
+        // Replace nessesary for correct work in Swagger
+        var result = await _userManager.ResetPasswordAsync(user, request.Token.Replace("%2F", "/"), request.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            return IdentityProblem(result.Errors);
+        }
+        
+        return Ok();
+    }
+
     [HttpGet]
-    public async Task<IActionResult> Get(string userId, bool confirmed = false)
+    public async Task<IActionResult> Get(string userId, bool onlyConfirmed = false)
     {
         var user = await _userManager.FindByIdAsync(userId);
 
-        if (user is null || ( confirmed && await _userManager.IsEmailConfirmedAsync(user)))
+        if (user is null || (onlyConfirmed && await _userManager.IsEmailConfirmedAsync(user)))
         {
             return NotFoundProblem($"User with id {userId} not found");
         }
 
-        return Ok(new UserDto(user.Id, user.UserName, user.Email));    
+        return Ok(new UserDto(user.Id, user.UserName, user.Email));
     }
 
     private IActionResult IdentityProblem(IEnumerable<IdentityError> identityErrors)
@@ -94,7 +128,7 @@ public class UserController : Controller
 
     private IActionResult NotFoundProblem(string detail)
     {
-        var problemDetails = 
+        var problemDetails =
             _problemDetailsFactory.CreateProblemDetails(HttpContext, statusCode: StatusCodes.Status404NotFound, detail: detail);
 
         return NotFound(problemDetails);
