@@ -7,10 +7,12 @@ using Core.Infrastructure.Domain.Categories;
 using Core.Infrastructure.Domain.Common;
 using Core.Infrastructure.Domain.Receipts;
 using Core.Infrastructure.Domain.Users;
+using Core.WebAPI;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SimpleInjector;
+using SimpleInjector.Lifestyles;
 using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddSimpleInjector(ioc, opt => opt.AddAspNetCore().AddControllerActivation());
 
-ioc.RegisterInstance<ISqlConnectionFactory>(new SqliteConnectionFactory("Data source = test.db"));
+ioc.RegisterInstance<ISqlConnectionFactory>(new SqliteConnectionFactory("Data source = core.db"));
 ioc.Register<ISqlQueryExecutor, SqlQueryExecutor>();
 ioc.Register<CoreDbContext>();
 ioc.Register<DbContext, CoreDbContext>();
@@ -47,6 +49,8 @@ ioc.RegisterDecorator(typeof(IQueryHandler<,>), typeof(ValidationQueryHandlerDec
 ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
 ioc.RegisterDecorator(typeof(ICommandHandler<>), typeof(ValidationCommandHandlerDecorator<>));
 
+ioc.Register<TestDataInitializer>(Lifestyle.Scoped);
+
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Expence Manager API", Version = "v1" });
@@ -55,6 +59,12 @@ builder.Services.AddSwaggerGen(opt =>
 });
 
 var app = builder.Build();
+app.Services.UseSimpleInjector(ioc);
+
+using (var scope = AsyncScopedLifestyle.BeginScope(ioc))
+{
+    await ioc.GetInstance<TestDataInitializer>().Initialize();
+}
 
 app.UseHellangProblemDetails();
 

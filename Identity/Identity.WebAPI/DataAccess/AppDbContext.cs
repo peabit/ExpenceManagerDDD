@@ -12,11 +12,11 @@ public class AppDbContext : IdentityDbContext<User>
         Database.EnsureCreated();
     }
 
-    //protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //{
-    //    base.OnModelCreating(modelBuilder);
-    //    //modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
-    //}
-    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+    }
+
     public DbSet<User> Users { get; set; }
 }

@@ -19,7 +19,7 @@ public class CoreDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data source = test.db");
+        optionsBuilder.UseSqlite("Data source = core.db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

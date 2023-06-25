@@ -1,3 +1,4 @@
+using Identity.WebAPI;
 using Identity.WebAPI.DataAccess;
 using Identity.WebAPI.Model;
 using Identity.WebAPI.Services.TokenSender;
@@ -22,6 +23,11 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    TestDataInitializer.Initialize(scope.ServiceProvider.GetRequiredService<UserManager<User>>());
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
