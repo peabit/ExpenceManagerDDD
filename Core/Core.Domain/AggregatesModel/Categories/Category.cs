@@ -7,11 +7,12 @@ namespace Core.Domain.AggregatesModel.Categories;
 
 public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
 {
-    public Category(User user, string name, Category? parentCategory = null)
+    public Category(User user, string name, Category? parentCategory = null, CategoryId? id = null)
+        : base(id)
     {
         User = user ?? throw new ArgumentNullException(nameof(user));
         Name = name ?? throw new ArgumentNullException(nameof(name));
-        ParentCategoryId = parentCategory?.Id; 
+        ParentCategoryId = parentCategory?.Id;
     }
 
     private Category() { }
@@ -20,11 +21,11 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
     private string _name;
 
     public User User { get; private init; }
-    
+
     public string Name
     {
         get => _name;
-        
+
         private set
         {
             if (String.IsNullOrWhiteSpace(value))
@@ -39,7 +40,7 @@ public sealed class Category : EntityBase<CategoryId>, IAggregateRoot
     public CategoryId? ParentCategoryId
     {
         get => _parentCategoryId;
-        
+
         private set
         {
             if (value == Id)

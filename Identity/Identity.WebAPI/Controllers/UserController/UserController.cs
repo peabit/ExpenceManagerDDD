@@ -47,7 +47,7 @@ public class UserController : Controller
     public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
-
+        
         if (user is null)
         {
             return NotFoundProblem($"User with email {request.Email} not found");
@@ -101,7 +101,7 @@ public class UserController : Controller
         return Ok();
     }
 
-    [HttpGet]
+    [HttpGet("{userId}")]
     public async Task<IActionResult> Get(string userId, bool onlyConfirmed = false)
     {
         var user = await _userManager.FindByIdAsync(userId);

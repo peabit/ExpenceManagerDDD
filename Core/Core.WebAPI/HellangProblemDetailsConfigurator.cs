@@ -11,7 +11,7 @@ public static class HellangProblemDetailsConfigurator
     {
         services.AddProblemDetails(opt =>
         {
-            opt.IncludeExceptionDetails = (ctx, ex) => false;
+            opt.IncludeExceptionDetails = (ctx, ex) => true;
 
             opt.OnBeforeWriteDetails = (ctx, details) =>
             {

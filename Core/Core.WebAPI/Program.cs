@@ -15,18 +15,25 @@ using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 var ioc = new Container();
-ioc.Options.EnableAutoVerification = false;
+ioc.Options.EnableAutoVerification = true;
 ioc.Options.DefaultLifestyle = Lifestyle.Scoped;
 
 builder.Services.AddHellangProblemDetails();
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 builder.Services.AddSimpleInjector(ioc, opt => opt.AddAspNetCore().AddControllerActivation());
 
 ioc.RegisterInstance<ISqlConnectionFactory>(new SqliteConnectionFactory("Data source = test.db"));
 ioc.Register<ISqlQueryExecutor, SqlQueryExecutor>();
 ioc.Register<CoreDbContext>();
 ioc.Register<DbContext, CoreDbContext>();
-ioc.Register<IUserProvider, FakeUserProvider>();
+
+ioc.RegisterInstance<HttpUserProviderSettings>(
+    builder.Configuration.GetSection("HttpUserProvider").Get<HttpUserProviderSettings>()!
+);
+
+ioc.Register<IUserProvider, HttpUserProvider>();
+
 ioc.Register<IReceiptRepository, ReceiptRepository>();
 ioc.Register<ICategoryRepository, CategoryRepository>();
 ioc.Register<ICategoryProvider, CategoryRepository>();

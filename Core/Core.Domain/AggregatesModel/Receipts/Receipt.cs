@@ -6,7 +6,8 @@ namespace Core.Domain.AggregatesModel.Receipts;
 
 public sealed class Receipt : EntityBase<ReceiptId>, IAggregateRoot
 {
-    public Receipt(User user, string shopName, DateTime dateTime, IEnumerable<ReceiptItem> items)
+    public Receipt(User user, string shopName, DateTime dateTime, IEnumerable<ReceiptItem> items, ReceiptId? id = null)
+        : base (id)
     {
         User = user ?? throw new ArgumentNullException(nameof(User));
         ShopName = shopName ?? throw new ArgumentNullException(nameof(ShopName));
